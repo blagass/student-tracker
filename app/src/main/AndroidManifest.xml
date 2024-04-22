@@ -13,10 +13,18 @@
         android:theme="@style/Theme.StudentTermTracker"
         tools:targetApi="31">
         <activity
-            android:name="UI.Terms"
+            android:name="UI.AddNewTerm"
+            android:parentActivityName="UI.TermsList"
+            android:label="Add New Term"
+            android:exported="false" />
+        <activity
+            android:name="UI.TermsList"
+            android:parentActivityName="UI.MainActivity"
+            android:label="Terms"
             android:exported="false" />
         <activity
             android:name="UI.MainActivity"
+            android:label="Home"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
