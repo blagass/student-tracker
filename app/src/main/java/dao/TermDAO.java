@@ -14,7 +14,7 @@ import entities.Term;
 @Dao
 public interface TermDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Term term;
+    void insert(Term term);
 
     @Update
     void update(Term term);

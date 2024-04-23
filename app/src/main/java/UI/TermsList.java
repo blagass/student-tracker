@@ -16,7 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import database.Repository;
+import entities.Course;
+import entities.Term;
+
 public class TermsList extends AppCompatActivity {
+    private Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +34,11 @@ public class TermsList extends AppCompatActivity {
             return insets;
         });
 
-        FloatingActionButton fab=findViewById(R.id.addTermButton);
+        FloatingActionButton fab = findViewById(R.id.addTermButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(TermsList.this,AddNewTerm.class);
+                Intent intent = new Intent(TermsList.this, AddNewTerm.class);
                 startActivity(intent);
             }
         });
@@ -42,18 +47,32 @@ public class TermsList extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_terms, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId()==R.id.courses){
-            Toast.makeText(this, "Course Selected?", Toast.LENGTH_SHORT).show();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.courses) {
+            repository=new Repository(getApplication());
+            //Toast.makeText(this, "Course Selected?", Toast.LENGTH_SHORT).show();
+
+            Term term = new Term(0, "Art");
+            repository.insert(term);
+
+            term = new Term(0,"Science");
+            repository.insert(term);
+
+            Course course=new Course(0,"Paint 101","Dr.John",1 );
+            repository.insert(course);
+
+            course=new Course(0,"Drawing 101","Dr.Jill",1);
+            repository.insert(course);
+
             return true;
         }
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
         }
