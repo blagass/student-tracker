@@ -2,7 +2,8 @@
     <string name="app_name">Student Term Tracker</string>
     <string name="student_term_scheduler">Student Term Scheduler</string>
     <string name="let_s_begin">Let\'s Begin</string>
-    <string name="courses">Courses</string>
+    <string name="Data">Add Course Data</string>
     <string name="student_terms">Student Terms</string>
     <string name="add_new_term">Add New Term</string>
+    <string name="term_details">Term Details</string>
 </resources>

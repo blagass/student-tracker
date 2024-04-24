@@ -13,7 +13,7 @@
         android:theme="@style/Theme.StudentTermTracker"
         tools:targetApi="31">
         <activity
-            android:name="UI.AddNewTerm"
+            android:name="UI.TermDetails"
             android:parentActivityName="UI.TermsList"
             android:label="Add New Term"
             android:exported="false" />

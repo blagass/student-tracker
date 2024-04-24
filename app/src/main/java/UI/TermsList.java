@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +37,7 @@ public class TermsList extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TermsList.this, AddNewTerm.class);
+                Intent intent = new Intent(TermsList.this, TermDetails.class);
                 startActivity(intent);
             }
         });
@@ -54,7 +53,7 @@ public class TermsList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.courses) {
+        if (item.getItemId() == R.id.addData) {
             repository=new Repository(getApplication());
             //Toast.makeText(this, "Course Selected?", Toast.LENGTH_SHORT).show();
 

@@ -11,17 +11,20 @@ import dao.TermDAO;
 import entities.Course;
 import entities.Term;
 
-@Database(entities = {Term.class, Course.class}, version = 4, exportSchema = false) //Needs update everytime changes made to db
+@Database(entities = {Term.class, Course.class}, version = 4, exportSchema = false)
+//Needs update everytime changes made to db
 public abstract class ScheduleDatabaseBuilder extends RoomDatabase {
     public abstract TermDAO termDAO(); //Term dao
+
     public abstract CourseDAO courseDAO(); //Course dao
+
     private static volatile ScheduleDatabaseBuilder INSTANCE;
 
-    static ScheduleDatabaseBuilder getDatabase(final Context context){
-        if(INSTANCE==null){
-            synchronized (ScheduleDatabaseBuilder.class){
-                if(INSTANCE==null){
-                    INSTANCE= Room.databaseBuilder(context.getApplicationContext(),ScheduleDatabaseBuilder.class,"MyScheduleDatabase.db")
+    static ScheduleDatabaseBuilder getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (ScheduleDatabaseBuilder.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), ScheduleDatabaseBuilder.class, "MyScheduleDatabase.db")
                             .fallbackToDestructiveMigration()
                             .build();
                 }
