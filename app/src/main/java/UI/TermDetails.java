@@ -9,11 +9,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import database.Repository;
+import entities.Course;
+
 public class TermDetails extends AppCompatActivity {
+
+    Repository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +42,11 @@ public class TermDetails extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
+        repository = new Repository(getApplication());
+        final CourseAdapter courseAdapter = new CourseAdapter(this);
+        recyclerView.setAdapter(courseAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        courseAdapter.setCourses(repository.getmAllCourses());
     }
 }

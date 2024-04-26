@@ -11,9 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import database.Repository;
 import entities.Course;
@@ -42,7 +46,14 @@ public class TermsList extends AppCompatActivity {
             }
         });
 
-        System.out.println(getIntent().getStringExtra("test"));
+        RecyclerView recyclerView=findViewById(R.id.recyclerview);
+        repository=new Repository(getApplication());
+        List<Term> allTerms=repository.getmAllTerms();
+        final TermAdapter termAdapter=new TermAdapter(this);
+        recyclerView.setAdapter(termAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        termAdapter.setTerms(allTerms);
+        //System.out.println(getIntent().getStringExtra("test"));
     }
 
     @Override
