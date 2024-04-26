@@ -3,6 +3,7 @@ package UI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +17,11 @@ import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import database.Repository;
-import entities.Course;
 
 public class TermDetails extends AppCompatActivity {
+    String name;
+    int termId;
+    EditText editName;
 
     Repository repository;
 
@@ -29,6 +32,12 @@ public class TermDetails extends AppCompatActivity {
         setContentView(R.layout.activity_term_details);
 
         FloatingActionButton fab = findViewById(R.id.addTermDetails);
+
+        editName=findViewById(R.id.titletext);
+        name =getIntent().getStringExtra("name");
+        editName.setText(name);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
