@@ -19,7 +19,6 @@
             android:parentActivityName="UI.TermDetails"
             />
 
-
         <activity
             android:name="UI.TermDetails"
             android:exported="false"

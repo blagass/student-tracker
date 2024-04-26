@@ -2,6 +2,8 @@ package UI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -16,7 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import database.Repository;
+import entities.Course;
+import entities.Term;
 
 public class TermDetails extends AppCompatActivity {
     String name;
@@ -34,6 +41,7 @@ public class TermDetails extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.addTermDetails);
 
         editName=findViewById(R.id.titletext);
+        termId = getIntent().getIntExtra("id",-1);
         name =getIntent().getStringExtra("name");
         editName.setText(name);
 
@@ -56,6 +64,34 @@ public class TermDetails extends AppCompatActivity {
         final CourseAdapter courseAdapter = new CourseAdapter(this);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        courseAdapter.setCourses(repository.getmAllCourses());
+        List<Course> filteredCourse = new ArrayList<>();
+        for(Course course:repository.getmAllCourses()){
+            if(course.getTermID()==termId)filteredCourse.add(course);
+        }
+        courseAdapter.setCourses(filteredCourse);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_termdetails,menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId()==R.id.termsave){
+            Term term;
+            if (termId==-1){
+                if(repository.getmAllTerms().size()==0) termId =1;
+                else termId=repository.getmAllTerms().get(repository.getmAllTerms().size() - 1).getTermID() +1;
+                term = new Term(termId,editName.getText().toString());
+                repository.insert(term);
+                this.finish();
+            }
+            else {
+                term = new Term(termId,editName.getText().toString());
+                repository.update(term);
+                this.finish();
+            }
+        }
+        return true;
     }
 }

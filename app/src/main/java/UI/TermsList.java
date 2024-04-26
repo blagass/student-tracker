@@ -63,6 +63,17 @@ public class TermsList extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        List<Term> allTerms= repository.getmAllTerms();
+        RecyclerView recyclerView=findViewById(R.id.recyclerview);
+        final TermAdapter termAdapter=new TermAdapter(this);
+        recyclerView.setAdapter(termAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        termAdapter.setTerms(allTerms);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.addData) {
             repository=new Repository(getApplication());
