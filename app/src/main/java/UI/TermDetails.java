@@ -50,6 +50,7 @@ public class TermDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TermDetails.this, CourseDetails.class);
+                intent.putExtra("termID",termId);
                 startActivity(intent);
             }
         });
@@ -93,5 +94,22 @@ public class TermDetails extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
+        final CourseAdapter courseAdapter = new CourseAdapter(this); // Assuming you already have this adapter setup
+        recyclerView.setAdapter(courseAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<Course> filteredCourse = new ArrayList<>();
+        for(Course course:repository.getmAllCourses()){
+            if(course.getTermID() == termId) filteredCourse.add(course);
+        }
+
+        courseAdapter.setCourses(filteredCourse);
     }
 }
