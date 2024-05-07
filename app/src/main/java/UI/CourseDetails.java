@@ -97,15 +97,36 @@ public class CourseDetails extends AppCompatActivity {
                 repository.update(course);
                 this.finish();
             }
+            return true;
         }
-        return true;
+
+        if(item.getItemId()== R.id.sharenote){
+            Intent sentIntent= new Intent();
+
+            sentIntent.setAction(Intent.ACTION_SEND );
+            sentIntent.putExtra(Intent.EXTRA_TEXT,editNote.getText().toString()+"EXTRA_TEXT");
+            sentIntent.putExtra(Intent.EXTRA_TITLE,editNote.getText().toString()+ "EXTRA_TITLE");
+            sentIntent.setType("text/plain");
+
+            Intent shareIntent=Intent.createChooser(sentIntent,null);
+
+            startActivity(shareIntent);
+            return true;
+        }
+        if (item.getItemId()==R.id.notify){
+            return true;
+        };
+
+        return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        termID = getIntent().getIntExtra("termID", this.termID);
+        //termID = getIntent().getIntExtra("termID", this.termID);
 
 //I cant get the term to not be -1 when I update a part
 
