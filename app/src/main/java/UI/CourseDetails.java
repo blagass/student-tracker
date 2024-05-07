@@ -1,5 +1,6 @@
 package UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,7 @@ public class CourseDetails extends AppCompatActivity {
        // editDate=findViewById(R.id.date);
 
 
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -83,7 +85,8 @@ public class CourseDetails extends AppCompatActivity {
             if (courseID==-1){
                 if(repository.getmAllCourses().isEmpty())
                     courseID =1;
-                else courseID=repository.getmAllCourses().get(repository.getmAllCourses().size() - 1).getCourseID() +1;
+                else
+                    courseID=repository.getmAllCourses().get(repository.getmAllCourses().size() - 1).getCourseID() +1;
 
                 course = new Course(courseID,editName.getText().toString(),editInstructor.getText().toString(),termID);
                 repository.insert(course);
@@ -96,6 +99,16 @@ public class CourseDetails extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        termID = getIntent().getIntExtra("termID", this.termID);
+
+//I cant get the term to not be -1 when I update a part
+
     }
 
 }

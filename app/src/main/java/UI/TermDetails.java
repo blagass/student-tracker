@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,9 +50,13 @@ public class TermDetails extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TermDetails.this, CourseDetails.class);
-                intent.putExtra("termID",termId);
-                startActivity(intent);
+                if(termId > 0) {
+                    Intent intent = new Intent(TermDetails.this, CourseDetails.class);
+                    intent.putExtra("termID", termId);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(TermDetails.this, "Please save the term before adding a course.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -79,6 +84,7 @@ public class TermDetails extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId()==R.id.termsave){
+
             Term term;
             if (termId==-1){
                 if(repository.getmAllTerms().size()==0) termId =1;
@@ -101,7 +107,7 @@ public class TermDetails extends AppCompatActivity {
         super.onResume();
 
         RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
-        final CourseAdapter courseAdapter = new CourseAdapter(this); // Assuming you already have this adapter setup
+        final CourseAdapter courseAdapter = new CourseAdapter(this);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -111,5 +117,6 @@ public class TermDetails extends AppCompatActivity {
         }
 
         courseAdapter.setCourses(filteredCourse);
+
     }
 }
