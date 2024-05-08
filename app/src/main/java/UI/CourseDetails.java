@@ -40,7 +40,7 @@ public class CourseDetails extends AppCompatActivity {
     String instructor;
     EditText editInstructor;
 
-    TextView editDate;
+    CalendarView editDate;
     Repository repository;
     DatePickerDialog.OnDateSetListener startDate;
     final Calendar myCalendarStart = Calendar.getInstance();
@@ -69,17 +69,17 @@ public class CourseDetails extends AppCompatActivity {
 
         editNote=findViewById(R.id.note);
         editDate=findViewById(R.id.date);
-
-        //Start of date picker stuff
+//
+//        //Start of date picker stuff
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
+//
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Date date;
                 //Get value from other screen
-                String info=editDate.getText().toString();
+                String info=editDate.toString(); //removed.getText() after editDate.
                 if(info.equals(""))info="5/1/23";
                 try {
                     myCalendarStart.setTime(sdf.parse(info));
@@ -92,7 +92,7 @@ public class CourseDetails extends AppCompatActivity {
             }
         });
 
-
+//
         startDate=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -102,7 +102,7 @@ public class CourseDetails extends AppCompatActivity {
                 updateLabelStart();
             }
         };
-
+//
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -112,11 +112,13 @@ public class CourseDetails extends AppCompatActivity {
 
     }
 
+
+
     private void updateLabelStart(){
         String myFormat="MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
 
-        editDate.setText(sdf.format(myCalendarStart.getTime()));
+        editDate.setDate(Long.parseLong(sdf.format(myCalendarStart.getTime())));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
