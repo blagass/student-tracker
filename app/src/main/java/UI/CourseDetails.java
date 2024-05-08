@@ -40,9 +40,11 @@ public class CourseDetails extends AppCompatActivity {
     String instructor;
     EditText editInstructor;
 
-    CalendarView editDate;
+    TextView dateDisplay;
+    CalendarView calendarView;
+   // TextView editDate;
     Repository repository;
-    DatePickerDialog.OnDateSetListener startDate;
+   // DatePickerDialog.OnDateSetListener startDate;
     final Calendar myCalendarStart = Calendar.getInstance();
 
     @Override
@@ -68,41 +70,60 @@ public class CourseDetails extends AppCompatActivity {
         termID = getIntent().getIntExtra("termID",-1);
 
         editNote=findViewById(R.id.note);
-        editDate=findViewById(R.id.date);
-//
-//        //Start of date picker stuff
+        calendarView =findViewById(R.id.date);
+        dateDisplay=findViewById(R.id.date_display);
+
+       // editDate=findViewById(R.id.date);
+
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-//
-        editDate.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+//        editDate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Date date;
+//                //Get value from other screen
+//                String info=editDate.toString(); //removed.getText() after editDate.
+//                if(info.equals(""))info="5/1/23";
+//                try {
+//                    myCalendarStart.setTime(sdf.parse(info));
+//                } catch (ParseException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                new DatePickerDialog(CourseDetails.this, startDate, myCalendarStart
+//                        .get(Calendar.YEAR),myCalendarStart.get(Calendar.MONTH),
+//                        myCalendarStart.get(Calendar.DAY_OF_MONTH)).show();
+//            }
+//        });
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onClick(View v) {
-                Date date;
-                //Get value from other screen
-                String info=editDate.toString(); //removed.getText() after editDate.
-                if(info.equals(""))info="5/1/23";
-                try {
-                    myCalendarStart.setTime(sdf.parse(info));
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-                new DatePickerDialog(CourseDetails.this, startDate,myCalendarStart
-                        .get(Calendar.YEAR),myCalendarStart.get(Calendar.MONTH),
-                        myCalendarStart.get(Calendar.DAY_OF_MONTH)).show();
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                myCalendarStart.set(Calendar.YEAR, year);
+                myCalendarStart.set(Calendar.MONTH, month);
+                myCalendarStart.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateDisplay();
             }
         });
 
+
+//        startDate=new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                myCalendarStart.set(Calendar.YEAR, year);
+//                myCalendarStart.set(Calendar.MONDAY, month);
+//                myCalendarStart.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+//                updateLabelStart();
 //
-        startDate=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                myCalendarStart.set(Calendar.YEAR, year);
-                myCalendarStart.set(Calendar.MONDAY, month);
-                myCalendarStart.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                updateLabelStart();
-            }
-        };
+//                String myFormat ="MM/dd/yy";
+//                SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
 //
+//                updateLabelStart();
+//            }
+//        };
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -112,13 +133,16 @@ public class CourseDetails extends AppCompatActivity {
 
     }
 
-
-
+    private void updateDateDisplay() {
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        dateDisplay.setText(sdf.format(myCalendarStart.getTime()));
+    }
     private void updateLabelStart(){
         String myFormat="MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
 
-        editDate.setDate(Long.parseLong(sdf.format(myCalendarStart.getTime())));
+        dateDisplay.setText(sdf.format(myCalendarStart.getTime()));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
