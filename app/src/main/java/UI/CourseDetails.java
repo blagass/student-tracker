@@ -1,6 +1,9 @@
 package UI;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -190,7 +193,22 @@ public class CourseDetails extends AppCompatActivity {
             startActivity(shareIntent);
             return true;
         }
-        if (item.getItemId()==R.id.notify){
+        if (item.getItemId()==R.id.notify){ //STARTING HERE
+            String dateFromScreen=dateDisplay.getText().toString(); //not sure I'm pulling the right thing
+            String myFormat = "MM/dd/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            Date myDate=null;
+            try {
+                myDate = sdf.parse(dateFromScreen);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            Long trigger = myDate.getTime();
+            Intent intent = new Intent(CourseDetails.this, MyReceiver.class);
+            intent.putExtra("key","Heres a test message");
+            PendingIntent sender=PendingIntent.getBroadcast(CourseDetails.this,++MainActivity.numAlert,intent,PendingIntent.FLAG_IMMUTABLE);
+            AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP,trigger,sender);
             return true;
         };
 
