@@ -97,6 +97,7 @@ public class TermsList extends AppCompatActivity {
             this.finish();
             return true;
         }
+
         return true;
     }
 

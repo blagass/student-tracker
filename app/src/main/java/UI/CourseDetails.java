@@ -1,9 +1,13 @@
 package UI;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,6 +18,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tracker.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import database.Repository;
 import entities.Course;
@@ -32,6 +42,8 @@ public class CourseDetails extends AppCompatActivity {
 
     TextView editDate;
     Repository repository;
+    DatePickerDialog.OnDateSetListener startDate;
+    final Calendar myCalendarStart = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +68,40 @@ public class CourseDetails extends AppCompatActivity {
         termID = getIntent().getIntExtra("termID",-1);
 
         editNote=findViewById(R.id.note);
-       // editDate=findViewById(R.id.date);
+        editDate=findViewById(R.id.date);
 
+        //Start of date picker stuff
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+        editDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date date;
+                //Get value from other screen
+                String info=editDate.getText().toString();
+                if(info.equals(""))info="5/1/23";
+                try {
+                    myCalendarStart.setTime(sdf.parse(info));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                new DatePickerDialog(CourseDetails.this, startDate,myCalendarStart
+                        .get(Calendar.YEAR),myCalendarStart.get(Calendar.MONTH),
+                        myCalendarStart.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+
+        startDate=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                myCalendarStart.set(Calendar.YEAR, year);
+                myCalendarStart.set(Calendar.MONDAY, month);
+                myCalendarStart.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                updateLabelStart();
+            }
+        };
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -66,6 +110,13 @@ public class CourseDetails extends AppCompatActivity {
             return insets;
         });
 
+    }
+
+    private void updateLabelStart(){
+        String myFormat="MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
+
+        editDate.setText(sdf.format(myCalendarStart.getTime()));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -122,14 +173,14 @@ public class CourseDetails extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        //termID = getIntent().getIntExtra("termID", this.termID);
-
-//I cant get the term to not be -1 when I update a part
-
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        //termID = getIntent().getIntExtra("termID", this.termID);
+//
+////I cant get the term to not be -1 when I update a part
+//
+//    }
 
 }
