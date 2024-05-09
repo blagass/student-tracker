@@ -32,6 +32,8 @@ public class TermDetails extends AppCompatActivity {
     EditText editName;
 
     Repository repository;
+    Term currentTerm;
+    int numCourses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,26 @@ public class TermDetails extends AppCompatActivity {
                 this.finish();
             }
         }
+        if(item.getItemId()==R.id.termdelete){
+            for(Term term: repository.getmAllTerms()){
+                if(term.getTermID()==termId)currentTerm=term;
+            }
+            numCourses=0;
+            for(Course course: repository.getmAllCourses()){
+                if(course.getTermID()==termId)++numCourses;
+            }
+            if(numCourses==0){{
+                repository.delete(currentTerm);
+                Toast.makeText(this, "Term Deleted", Toast.LENGTH_LONG).show();
+                TermDetails.this.finish();
+            }
+
+        }else{
+                Toast.makeText(TermDetails.this, "Can't delete a term with a course", Toast.LENGTH_SHORT).show();
+
+            }
+
+    }
         return true;
     }
 
@@ -118,5 +140,4 @@ public class TermDetails extends AppCompatActivity {
 
         courseAdapter.setCourses(filteredCourse);
 
-    }
-}
+    }}
