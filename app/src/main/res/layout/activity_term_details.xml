@@ -41,7 +41,7 @@
                         android:id="@+id/titletext"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:hint="product 1" />
+                        android:hint="Term Name" />
                 </LinearLayout>
 
                 <LinearLayout

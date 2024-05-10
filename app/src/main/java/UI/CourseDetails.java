@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -24,6 +26,7 @@ import com.example.tracker.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -133,6 +136,15 @@ public class CourseDetails extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Spinner spinner=findViewById(R.id.spinner);
+        ArrayList<Term> termArrayList=new ArrayList<>();
+
+        termArrayList.addAll(repository.getmAllTerms());
+
+        ArrayAdapter<Term>termAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,termArrayList);
+        spinner.setAdapter(termAdapter);
+
 
     }
 

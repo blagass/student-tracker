@@ -19,6 +19,10 @@ public class Term {
         return termID;
     }
 
+    public String toString(){
+        return termName;
+    }
+
     public void setTermID(int termID) {
         this.termID = termID;
     }
