@@ -62,7 +62,7 @@
                         android:text="@string/instructor" />
 
                     <EditText
-                        android:id="@+id/instructorename"
+                        android:id="@+id/termEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:hint="@string/instructor_name" />

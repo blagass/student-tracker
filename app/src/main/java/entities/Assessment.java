@@ -45,7 +45,7 @@ public class Assessment {
     }
 
     public Assessment(int assessmentID, String assessmentName, boolean assessmentType, int courseID) {
-        this.assessmentID = courseID;
+        this.assessmentID = assessmentID;
         this.assessmentName = assessmentName;
         this.assessmentType = assessmentType;
         this.courseID = courseID;

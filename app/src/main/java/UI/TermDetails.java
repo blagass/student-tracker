@@ -1,10 +1,12 @@
 package UI;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,8 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import database.Repository;
 import entities.Course;
@@ -35,6 +40,13 @@ public class TermDetails extends AppCompatActivity {
     Term currentTerm;
     int numCourses;
 
+    private EditText termStart, termEnd;
+    private final Calendar calendar = Calendar.getInstance();
+
+    private DatePickerDialog.OnDateSetListener startDatePickerListener;
+    private DatePickerDialog.OnDateSetListener endDatePickerListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +59,47 @@ public class TermDetails extends AppCompatActivity {
         termId = getIntent().getIntExtra("id",-1);
         name =getIntent().getStringExtra("name");
         editName.setText(name);
+
+        //NEW SECTION
+        // Find the EditText views
+        termStart = findViewById(R.id.termStart);
+        termEnd = findViewById(R.id.termEnd);
+
+        // Make them non-focusable and clickable
+        termStart.setFocusable(false);
+        termStart.setClickable(true);
+        termEnd.setFocusable(false);
+        termEnd.setClickable(true);
+
+        // Date Picker Setup
+        startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(termStart);
+            }
+        };
+
+        endDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(termEnd);
+            }
+        };
+
+        termStart.setOnClickListener(v -> new DatePickerDialog(TermDetails.this, startDatePickerListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        termEnd.setOnClickListener(v -> new DatePickerDialog(TermDetails.this, endDatePickerListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
+
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +131,12 @@ public class TermDetails extends AppCompatActivity {
         }
         courseAdapter.setCourses(filteredCourse);
     }
+    private void updateDateLabel(EditText dateEditText) {
+        String myFormat = "MM/dd/yy"; // You might want to customize this format
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        dateEditText.setText(sdf.format(calendar.getTime()));
+    }
+
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_termdetails,menu);

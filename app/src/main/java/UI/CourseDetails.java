@@ -1,17 +1,14 @@
 package UI;
 
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -68,7 +65,7 @@ public class CourseDetails extends AppCompatActivity {
 
         //Instructor
         instructor= getIntent().getStringExtra("instructor");
-        editInstructor=findViewById(R.id.instructorename);
+        editInstructor=findViewById(R.id.termEnd);
         editInstructor.setText(instructor);
 
         //Course and Term setup

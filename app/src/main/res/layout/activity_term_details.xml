@@ -53,13 +53,35 @@
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:padding="10dp"
-                        android:text="Price:  " />
+                        android:text="Start: " />
 
                     <EditText
-                        android:id="@+id/instructorename"
+                        android:id="@+id/termStart"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:hint="0.00" />
+                        android:hint="Date"
+                        android:focusable="false"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:padding="10dp"
+                        android:text="End: " />
+
+                    <EditText
+                        android:id="@+id/termEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:hint="Date" />
                 </LinearLayout>
 
             </LinearLayout>

@@ -24,6 +24,11 @@
             android:label="Course Details"
             android:parentActivityName="UI.TermDetails" />
         <activity
+            android:name="UI.AssessmentDetails"
+            android:exported="false"
+            android:label="Assessment Details"
+            android:parentActivityName="UI.CourseDetails" />
+        <activity
             android:name="UI.TermDetails"
             android:exported="false"
             android:label="Terms Details"

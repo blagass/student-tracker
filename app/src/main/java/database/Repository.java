@@ -31,7 +31,7 @@ public class Repository {
         ScheduleDatabaseBuilder db=ScheduleDatabaseBuilder.getDatabase(application);
         mCourseDAO=db.courseDAO();
         mTermDAO=db.termDAO();
-
+        mAssessmentDAO=db.assessmentDAO();
 
     }
 

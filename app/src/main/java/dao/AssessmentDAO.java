@@ -1,5 +1,6 @@
 package dao;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -9,7 +10,7 @@ import androidx.room.Update;
 import java.util.List;
 
 import entities.Assessment;
-
+@Dao
 public interface AssessmentDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Assessment assessment);
@@ -27,4 +28,3 @@ public interface AssessmentDAO {
     List<Assessment> getAssociatedAssessments(int courseID);
 }
 
-6
