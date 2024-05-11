@@ -22,6 +22,9 @@ import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -132,11 +135,19 @@ public class TermDetails extends AppCompatActivity {
         courseAdapter.setCourses(filteredCourse);
     }
     private void updateDateLabel(EditText dateEditText) {
-        String myFormat = "MM/dd/yy"; // You might want to customize this format
+        String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         dateEditText.setText(sdf.format(calendar.getTime()));
     }
 
+    private LocalDate dateConverter(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy", Locale.US);
+        try {
+            return LocalDate.parse(dateString, formatter);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_termdetails,menu);
@@ -150,12 +161,16 @@ public class TermDetails extends AppCompatActivity {
             if (termId==-1){
                 if(repository.getmAllTerms().size()==0) termId =1;
                 else termId=repository.getmAllTerms().get(repository.getmAllTerms().size() - 1).getTermID() +1;
-                term = new Term(termId,editName.getText().toString());
+                String start = termStart.getText().toString();
+                String end = termEnd.getText().toString();
+                term = new Term(termId,editName.getText().toString(),start , end);
                 repository.insert(term);
                 this.finish();
             }
             else {
-                term = new Term(termId,editName.getText().toString());
+                String start = termStart.getText().toString();
+                String end = termEnd.getText().toString();
+                term = new Term(termId,editName.getText().toString(),start ,end );
                 repository.update(term);
                 this.finish();
             }
