@@ -1,6 +1,7 @@
 package UI;
 
 import android.app.AlarmManager;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,13 +44,18 @@ public class CourseDetails extends AppCompatActivity {
     //custom adds
     String instructor;
     EditText editInstructor;
+    Spinner statusSpinner;
 
     TextView dateDisplay;
-    CalendarView calendarView;
-   // TextView editDate;
+
     Repository repository;
-   // DatePickerDialog.OnDateSetListener startDate;
-    final Calendar myCalendarStart = Calendar.getInstance();
+
+    private EditText courseStart, courseEnd;
+    private final Calendar calendar = Calendar.getInstance();
+
+    private DatePickerDialog.OnDateSetListener startDatePickerListener;
+    private DatePickerDialog.OnDateSetListener endDatePickerListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +65,56 @@ public class CourseDetails extends AppCompatActivity {
 
         repository=new Repository(getApplication());
 
+
         //Name setup // do the same for other parameters
         name= getIntent().getStringExtra("name");
         editName=findViewById(R.id.coursename);
         editName.setText(name);
+
+
+        String courseStartDate=getIntent().getStringExtra("editStartDate");
+        String courseEndDate=getIntent().getStringExtra("editEndDate");
+
+        courseStart=findViewById(R.id.editStartDate);
+        courseEnd=findViewById(R.id.editEndDate);
+
+        courseStart.setFocusable(false);
+        courseStart.setClickable(true);
+        courseEnd.setFocusable(false);
+        courseEnd.setClickable(true);
+
+        // Date Picker Setup
+        startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(courseStart);
+            }
+        };
+
+        endDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(courseEnd);
+            }
+        };
+
+        courseStart.setOnClickListener(v -> new DatePickerDialog(CourseDetails.this, startDatePickerListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        courseEnd.setOnClickListener(v -> new DatePickerDialog(CourseDetails.this, endDatePickerListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
+        //
+
+
+
 
         //Instructor
         instructor= getIntent().getStringExtra("instructor");
@@ -74,57 +127,9 @@ public class CourseDetails extends AppCompatActivity {
 
         editNote=findViewById(R.id.note);
 
-       // editDate=findViewById(R.id.date);
-
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-
-
-
-//        editDate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Date date;
-//                //Get value from other screen
-//                String info=editDate.toString(); //removed.getText() after editDate.
-//                if(info.equals(""))info="5/1/23";
-//                try {
-//                    myCalendarStart.setTime(sdf.parse(info));
-//                } catch (ParseException e) {
-//                    throw new RuntimeException(e);
-//                }
-//                new DatePickerDialog(CourseDetails.this, startDate, myCalendarStart
-//                        .get(Calendar.YEAR),myCalendarStart.get(Calendar.MONTH),
-//                        myCalendarStart.get(Calendar.DAY_OF_MONTH)).show();
-//            }
-//        });
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                myCalendarStart.set(Calendar.YEAR, year);
-                myCalendarStart.set(Calendar.MONTH, month);
-                myCalendarStart.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDateDisplay();
-            }
-        });
-
-
-//        startDate=new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                myCalendarStart.set(Calendar.YEAR, year);
-//                myCalendarStart.set(Calendar.MONDAY, month);
-//                myCalendarStart.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-//                updateLabelStart();
-//
-//                String myFormat ="MM/dd/yy";
-//                SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
-//
-//                updateLabelStart();
-//            }
-//        };
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -132,27 +137,25 @@ public class CourseDetails extends AppCompatActivity {
             return insets;
         });
 
-        Spinner spinner=findViewById(R.id.spinner);
-        ArrayList<Term> termArrayList=new ArrayList<>();
+        statusSpinner = findViewById(R.id.statusSpinner);
 
-        termArrayList.addAll(repository.getmAllTerms());
+        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.course_status_array,
+                android.R.layout.simple_spinner_item
+        );
 
-        ArrayAdapter<Term>termAdapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,termArrayList);
-        spinner.setAdapter(termAdapter);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        statusSpinner.setAdapter(statusAdapter);
 
 
     }
 
-    private void updateDateDisplay() {
+    private void updateDateLabel(EditText dateEditText) {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-        dateDisplay.setText(sdf.format(myCalendarStart.getTime()));
-    }
-    private void updateLabelStart(){
-        String myFormat="MM/dd/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
-
-        dateDisplay.setText(sdf.format(myCalendarStart.getTime()));
+        dateEditText.setText(sdf.format(calendar.getTime()));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -161,13 +164,8 @@ public class CourseDetails extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-
-        if(item.getItemId() == android.R.id.home){
-            this.finish();
-            return true;
-        }
-        // Built b
         if(item.getItemId()==R.id.coursesave){
+
             Course course;
             if (courseID==-1){
                 if(repository.getmAllCourses().isEmpty())
@@ -175,12 +173,20 @@ public class CourseDetails extends AppCompatActivity {
                 else
                     courseID=repository.getmAllCourses().get(repository.getmAllCourses().size() - 1).getCourseID() +1;
 
-                course = new Course(courseID,editName.getText().toString(),editInstructor.getText().toString(),termID);
+                String selectedStatus = statusSpinner.getSelectedItem().toString();
+
+               // course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus);
+                String start = courseStart.getText().toString();
+                String end = courseEnd.getText().toString();
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end);
                 repository.insert(course);
                 this.finish();
             }
             else {
-                course = new Course(courseID,editName.getText().toString(),editInstructor.getText().toString(),termID);
+                String selectedStatus = statusSpinner.getSelectedItem().toString();
+                String start = courseStart.getText().toString();
+                String end = courseEnd.getText().toString();
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus,start,end);
                 repository.update(course);
                 this.finish();
             }
@@ -222,16 +228,5 @@ public class CourseDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-//// I cant get the term to not be -1 when I update a part
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        //termID = getIntent().getIntExtra("termID", this.termID);
-//
-//
-//    }
 
 }

@@ -91,9 +91,10 @@
                 </LinearLayout>
 
                 <Spinner
-                    android:id="@+id/spinner"
+                    android:id="@+id/statusSpinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:entries="@array/course_status_array"  />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -109,11 +110,9 @@
                     <EditText
                         android:id="@+id/editStartDate"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:text="Start Date" />
+                        android:layout_height="50dp"
+                        android:focusable="false"
+                        android:clickable="true"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
@@ -124,10 +123,8 @@
                         android:id="@+id/editEndDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:text="End Date" />
+                        android:focusable="false"
+                        android:clickable="true" />
 
 
                 </LinearLayout>

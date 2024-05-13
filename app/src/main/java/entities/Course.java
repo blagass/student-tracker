@@ -12,11 +12,35 @@ public class Course {
     //Foreign key
     private int termID;
 
-    public Course(int courseID, String courseName, String instructorName, int termID) {
+    private String selectedStatus;
+    private String startDate;
+    private String endDate;
+
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public Course(int courseID, String courseName, String instructorName, int termID, String selectedStatus, String startDate, String endDate) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.instructorName = instructorName;
         this.termID = termID;
+        this.selectedStatus=selectedStatus;
+        this.startDate=startDate;
+        this.endDate=endDate;
     }
 
     public int getCourseID() {
@@ -50,4 +74,12 @@ public class Course {
     public void setTermID(int termID) {
         this.termID = termID;
     }
+    public String getSelectedStatus() {
+        return selectedStatus;
+    }
+
+    public void setSelectedStatus(String selectedStatus) {
+        this.selectedStatus = selectedStatus;
+    }
+
 }

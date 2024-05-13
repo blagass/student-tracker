@@ -72,7 +72,7 @@ public class TermDetails extends AppCompatActivity {
         editName.setText(name);
 
         //NEW SECTION
-        // Find the EditText views
+
         termStart = findViewById(R.id.termStart);
         termEnd = findViewById(R.id.termEnd);
 
@@ -80,7 +80,7 @@ public class TermDetails extends AppCompatActivity {
         termEnd.setText(termEndDate);
 
 
-        // Make them non-focusable and clickable
+
         termStart.setFocusable(false);
         termStart.setClickable(true);
         termEnd.setFocusable(false);
@@ -114,7 +114,7 @@ public class TermDetails extends AppCompatActivity {
         termEnd.setOnClickListener(v -> new DatePickerDialog(TermDetails.this, endDatePickerListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
-
+        //
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -152,14 +152,14 @@ public class TermDetails extends AppCompatActivity {
         dateEditText.setText(sdf.format(calendar.getTime()));
     }
 
-    private LocalDate dateConverter(String dateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy", Locale.US);
-        try {
-            return LocalDate.parse(dateString, formatter);
-        } catch (DateTimeParseException e) {
-            return null;
-        }
-    }
+//    private LocalDate dateConverter(String dateString) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy", Locale.US);
+//        try {
+//            return LocalDate.parse(dateString, formatter);
+//        } catch (DateTimeParseException e) {
+//            return null;
+//        }
+//    }
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_termdetails,menu);
@@ -170,9 +170,6 @@ public class TermDetails extends AppCompatActivity {
         if(item.getItemId()==R.id.termsave){
 
             Term term;
-
-
-
             if (termId==-1){
                 if(repository.getmAllTerms().size()==0) termId =1;
                 else termId=repository.getmAllTerms().get(repository.getmAllTerms().size() - 1).getTermID() +1;
