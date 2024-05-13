@@ -90,36 +90,47 @@
 
                 </LinearLayout>
 
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <TextView
+                                <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:padding="10dp"
                         android:text="@string/date" />
 
-                    <TextView
-                        android:id="@+id/date_display"
-                        android:layout_width="116dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Selected Date" />
-
-                    <CalendarView
-                        android:id="@+id/date"
+                    <EditText
+                        android:id="@+id/editStartDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:text="Start Date" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:padding="10dp"
+                        android:text="@string/end_date" />
+
+                    <EditText
+                        android:id="@+id/editEndDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="text"
+                        android:text="End Date" />
+
 
                 </LinearLayout>
-
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 

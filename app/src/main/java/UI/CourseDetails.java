@@ -73,8 +73,6 @@ public class CourseDetails extends AppCompatActivity {
         termID = getIntent().getIntExtra("termID",-1);
 
         editNote=findViewById(R.id.note);
-        calendarView =findViewById(R.id.date);
-        dateDisplay=findViewById(R.id.date_display);
 
        // editDate=findViewById(R.id.date);
 
@@ -168,7 +166,7 @@ public class CourseDetails extends AppCompatActivity {
             this.finish();
             return true;
         }
-        // Built from flamingo presentation
+        // Built b
         if(item.getItemId()==R.id.coursesave){
             Course course;
             if (courseID==-1){

@@ -23,10 +23,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,12 +63,22 @@ public class TermDetails extends AppCompatActivity {
         editName=findViewById(R.id.titletext);
         termId = getIntent().getIntExtra("id",-1);
         name =getIntent().getStringExtra("name");
+
+        String termStartDate = getIntent().getStringExtra("termStart");
+        String termEndDate = getIntent().getStringExtra("termEnd");
+
+
+
         editName.setText(name);
 
         //NEW SECTION
         // Find the EditText views
         termStart = findViewById(R.id.termStart);
         termEnd = findViewById(R.id.termEnd);
+
+        termStart.setText(termStartDate);
+        termEnd.setText(termEndDate);
+
 
         // Make them non-focusable and clickable
         termStart.setFocusable(false);
@@ -158,6 +170,9 @@ public class TermDetails extends AppCompatActivity {
         if(item.getItemId()==R.id.termsave){
 
             Term term;
+
+
+
             if (termId==-1){
                 if(repository.getmAllTerms().size()==0) termId =1;
                 else termId=repository.getmAllTerms().get(repository.getmAllTerms().size() - 1).getTermID() +1;
