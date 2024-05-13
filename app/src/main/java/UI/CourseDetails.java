@@ -168,7 +168,7 @@ public class CourseDetails extends AppCompatActivity {
             this.finish();
             return true;
         }
-
+        // Built from flamingo presentation
         if(item.getItemId()==R.id.coursesave){
             Course course;
             if (courseID==-1){
@@ -202,7 +202,7 @@ public class CourseDetails extends AppCompatActivity {
             startActivity(shareIntent);
             return true;
         }
-        if (item.getItemId()==R.id.notify){ //STARTING HERE
+        if (item.getItemId()==R.id.notify){
             String dateFromScreen=dateDisplay.getText().toString(); //not sure I'm pulling the right thing
             String myFormat = "MM/dd/yy";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -225,6 +225,7 @@ public class CourseDetails extends AppCompatActivity {
     }
 
 
+//// I cant get the term to not be -1 when I update a part
 
 //    @Override
 //    protected void onResume() {
@@ -232,7 +233,6 @@ public class CourseDetails extends AppCompatActivity {
 //
 //        //termID = getIntent().getIntExtra("termID", this.termID);
 //
-////I cant get the term to not be -1 when I update a part
 //
 //    }
 
