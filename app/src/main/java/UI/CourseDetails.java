@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -55,6 +56,8 @@ public class CourseDetails extends AppCompatActivity {
 
     private DatePickerDialog.OnDateSetListener startDatePickerListener;
     private DatePickerDialog.OnDateSetListener endDatePickerListener;
+
+    ArrayAdapter<CharSequence> statusAdapter;
 
 
     @Override
@@ -251,10 +254,9 @@ public class CourseDetails extends AppCompatActivity {
             alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
             return true;
         }
-        ;
+
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }

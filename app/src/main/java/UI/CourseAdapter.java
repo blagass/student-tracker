@@ -80,12 +80,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             // Create Intent to start CourseDetails activity
             Intent intent = new Intent(context, CourseDetails.class);
             intent.putExtra("id,", course.getCourseID());
-            intent.putExtra("name", course.getCourseName()); // Assuming you have getCourseName()
-            intent.putExtra("instructor", course.getInstructorName()); // Assuming you have getInstructor()
-            intent.putExtra("termID", course.getTermID()); // Assuming you have getTermID()
+            intent.putExtra("name", course.getCourseName());
+            intent.putExtra("instructor", course.getInstructorName());
+            intent.putExtra("termID", course.getTermID());
             intent.putExtra("editStartDate", course.getStartDate());
             intent.putExtra("editEndDate", course.getEndDate());
-            intent.putExtra("status", course.getSelectedStatus());
+            intent.putExtra("statusSpinner", course.getSelectedStatus());
 
             // Start the CourseDetails activity
             context.startActivity(intent);
