@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tracker.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,10 +69,11 @@ public class CourseDetails extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
 
+        FloatingActionButton fab = findViewById(R.id.addAssessmentButton);
+
         repository = new Repository(getApplication());
 
 
-        //Name setup // do the same for other parameters
         name = getIntent().getStringExtra("name");
         editName = findViewById(R.id.coursename);
         editName.setText(name);
@@ -175,6 +179,19 @@ public class CourseDetails extends AppCompatActivity {
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         statusSpinner.setAdapter(statusAdapter);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(courseID > 0) {
+                    Intent intent = new Intent(CourseDetails.this, AssessmentDetails.class);
+                    intent.putExtra("courseID", courseID);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(CourseDetails.this, "Please save the course before adding an assessment.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
