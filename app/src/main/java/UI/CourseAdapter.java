@@ -40,6 +40,9 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     intent.putExtra("id", current.getCourseID());
                     intent.putExtra("name", current.getCourseName());
                     intent.putExtra("instructor", current.getInstructorName());
+                    intent.putExtra("statusSpinner",current.getSelectedStatus());
+                    intent.putExtra("editStartDate", current.getStartDate());
+                    intent.putExtra("editEndDate", current.getEndDate());
                     context.startActivity(intent);
                 }
             });
@@ -69,6 +72,24 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             holder.courseItemView.setText("No Course Name");
             holder.courseItemView.setText("No Term ID");
         }
+
+
+        holder.itemView.setOnClickListener(view -> {
+            Course course = mCourses.get(position);
+
+            // Create Intent to start CourseDetails activity
+            Intent intent = new Intent(context, CourseDetails.class);
+            intent.putExtra("id,", course.getCourseID());
+            intent.putExtra("name", course.getCourseName()); // Assuming you have getCourseName()
+            intent.putExtra("instructor", course.getInstructorName()); // Assuming you have getInstructor()
+            intent.putExtra("termID", course.getTermID()); // Assuming you have getTermID()
+            intent.putExtra("editStartDate", course.getStartDate());
+            intent.putExtra("editEndDate", course.getEndDate());
+            intent.putExtra("status", course.getSelectedStatus());
+
+            // Start the CourseDetails activity
+            context.startActivity(intent);
+        });
     }
 
     public void setCourses(List<Course> courses){

@@ -63,20 +63,54 @@ public class CourseDetails extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
 
-        repository=new Repository(getApplication());
+        repository = new Repository(getApplication());
 
 
         //Name setup // do the same for other parameters
-        name= getIntent().getStringExtra("name");
-        editName=findViewById(R.id.coursename);
+        name = getIntent().getStringExtra("name");
+        editName = findViewById(R.id.coursename);
         editName.setText(name);
 
 
-        String courseStartDate=getIntent().getStringExtra("editStartDate");
-        String courseEndDate=getIntent().getStringExtra("editEndDate");
+        String courseStartDate = getIntent().getStringExtra("editStartDate");
+        String courseEndDate = getIntent().getStringExtra("editEndDate");
 
-        courseStart=findViewById(R.id.editStartDate);
-        courseEnd=findViewById(R.id.editEndDate);
+        String courseStatus = getIntent().getStringExtra("status");
+
+
+        statusSpinner = findViewById(R.id.statusSpinner);
+
+
+        // Initialize the ArrayAdapter (statusAdapter)
+        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.course_status_array, // Your array of course statuses
+                android.R.layout.simple_spinner_item
+        );
+
+        // Set the dropdown view resource for the adapter
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Set the adapter for the spinner
+        statusSpinner.setAdapter(statusAdapter);
+        if (courseStatus != null) {
+            int spinnerPosition = statusAdapter.getPosition(courseStatus);
+            if (spinnerPosition >= 0) {
+                statusSpinner.setSelection(spinnerPosition);
+            } else {
+
+                statusSpinner.setSelection(0);
+            }
+        }
+
+
+        courseStart = findViewById(R.id.editStartDate);
+        courseEnd = findViewById(R.id.editEndDate);
+
+
+        courseStart.setText(courseStartDate);
+        courseEnd.setText(courseEndDate);
+
 
         courseStart.setFocusable(false);
         courseStart.setClickable(true);
@@ -114,42 +148,36 @@ public class CourseDetails extends AppCompatActivity {
         //
 
 
-
-
         //Instructor
-        instructor= getIntent().getStringExtra("instructor");
-        editInstructor=findViewById(R.id.termEnd);
+        instructor = getIntent().getStringExtra("instructor");
+        editInstructor = findViewById(R.id.termEnd);
         editInstructor.setText(instructor);
 
         //Course and Term setup
         courseID = getIntent().getIntExtra("id,", -1);
-        termID = getIntent().getIntExtra("termID",-1);
+        termID = getIntent().getIntExtra("termID", -1);
 
-        editNote=findViewById(R.id.note);
+        editNote = findViewById(R.id.note);
 
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
+
+
+
+        statusSpinner = findViewById(R.id.statusSpinner);
+//
+
+
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        statusSpinner.setAdapter(statusAdapter);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        statusSpinner = findViewById(R.id.statusSpinner);
-
-        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.course_status_array,
-                android.R.layout.simple_spinner_item
-        );
-
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        statusSpinner.setAdapter(statusAdapter);
-
-
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -158,59 +186,58 @@ public class CourseDetails extends AppCompatActivity {
         dateEditText.setText(sdf.format(calendar.getTime()));
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_coursedetails,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_coursedetails, menu);
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId()==R.id.coursesave){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.coursesave) {
 
             Course course;
-            if (courseID==-1){
-                if(repository.getmAllCourses().isEmpty())
-                    courseID =1;
+            if (courseID == -1) {
+                if (repository.getmAllCourses().isEmpty())
+                    courseID = 1;
                 else
-                    courseID=repository.getmAllCourses().get(repository.getmAllCourses().size() - 1).getCourseID() +1;
+                    courseID = repository.getmAllCourses().get(repository.getmAllCourses().size() - 1).getCourseID() + 1;
 
                 String selectedStatus = statusSpinner.getSelectedItem().toString();
 
-               // course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus);
+                // course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus);
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
                 course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end);
                 repository.insert(course);
                 this.finish();
-            }
-            else {
+            } else {
                 String selectedStatus = statusSpinner.getSelectedItem().toString();
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
-                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus,start,end);
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end);
                 repository.update(course);
                 this.finish();
             }
             return true;
         }
 
-        if(item.getItemId()== R.id.sharenote){
-            Intent sentIntent= new Intent();
+        if (item.getItemId() == R.id.sharenote) {
+            Intent sentIntent = new Intent();
 
-            sentIntent.setAction(Intent.ACTION_SEND );
-            sentIntent.putExtra(Intent.EXTRA_TEXT,editNote.getText().toString()+"EXTRA_TEXT");
-            sentIntent.putExtra(Intent.EXTRA_TITLE,editNote.getText().toString()+ "EXTRA_TITLE");
+            sentIntent.setAction(Intent.ACTION_SEND);
+            sentIntent.putExtra(Intent.EXTRA_TEXT, editNote.getText().toString() + "EXTRA_TEXT");
+            sentIntent.putExtra(Intent.EXTRA_TITLE, editNote.getText().toString() + "EXTRA_TITLE");
             sentIntent.setType("text/plain");
 
-            Intent shareIntent=Intent.createChooser(sentIntent,null);
+            Intent shareIntent = Intent.createChooser(sentIntent, null);
 
             startActivity(shareIntent);
             return true;
         }
-        if (item.getItemId()==R.id.notify){
-            String dateFromScreen=dateDisplay.getText().toString(); //not sure I'm pulling the right thing
+        if (item.getItemId() == R.id.notify) {
+            String dateFromScreen = dateDisplay.getText().toString(); //not sure I'm pulling the right thing
             String myFormat = "MM/dd/yy";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            Date myDate=null;
+            Date myDate = null;
             try {
                 myDate = sdf.parse(dateFromScreen);
             } catch (ParseException e) {
@@ -218,12 +245,13 @@ public class CourseDetails extends AppCompatActivity {
             }
             Long trigger = myDate.getTime();
             Intent intent = new Intent(CourseDetails.this, MyReceiver.class);
-            intent.putExtra("key","Heres a test message");
-            PendingIntent sender=PendingIntent.getBroadcast(CourseDetails.this,++MainActivity.numAlert,intent,PendingIntent.FLAG_IMMUTABLE);
-            AlarmManager alarmManager=(AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP,trigger,sender);
+            intent.putExtra("key", "Heres a test message");
+            PendingIntent sender = PendingIntent.getBroadcast(CourseDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
             return true;
-        };
+        }
+        ;
 
         return super.onOptionsItemSelected(item);
     }
