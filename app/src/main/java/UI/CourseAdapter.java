@@ -77,7 +77,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         holder.itemView.setOnClickListener(view -> {
             Course course = mCourses.get(position);
 
-            // Create Intent to start CourseDetails activity
+
             Intent intent = new Intent(context, CourseDetails.class);
             intent.putExtra("id,", course.getCourseID());
             intent.putExtra("name", course.getCourseName());
@@ -87,7 +87,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             intent.putExtra("editEndDate", course.getEndDate());
             intent.putExtra("statusSpinner", course.getSelectedStatus());
 
-            // Start the CourseDetails activity
+
             context.startActivity(intent);
         });
     }

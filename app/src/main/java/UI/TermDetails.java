@@ -60,33 +60,26 @@ public class TermDetails extends AppCompatActivity {
 
         FloatingActionButton fab = findViewById(R.id.addTermDetails);
 
-        editName=findViewById(R.id.titletext);
         termId = getIntent().getIntExtra("id",-1);
         name =getIntent().getStringExtra("name");
 
         String termStartDate = getIntent().getStringExtra("termStart");
         String termEndDate = getIntent().getStringExtra("termEnd");
 
-
-
-        editName.setText(name);
-
-        //NEW SECTION
-
         termStart = findViewById(R.id.termStart);
         termEnd = findViewById(R.id.termEnd);
+        editName=findViewById(R.id.titletext);
 
         termStart.setText(termStartDate);
         termEnd.setText(termEndDate);
-
-
+        editName.setText(name);
 
         termStart.setFocusable(false);
         termStart.setClickable(true);
         termEnd.setFocusable(false);
         termEnd.setClickable(true);
 
-        // Date Picker Setup
+
         startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -114,8 +107,6 @@ public class TermDetails extends AppCompatActivity {
         termEnd.setOnClickListener(v -> new DatePickerDialog(TermDetails.this, endDatePickerListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
-        //
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,14 +143,6 @@ public class TermDetails extends AppCompatActivity {
         dateEditText.setText(sdf.format(calendar.getTime()));
     }
 
-//    private LocalDate dateConverter(String dateString) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy", Locale.US);
-//        try {
-//            return LocalDate.parse(dateString, formatter);
-//        } catch (DateTimeParseException e) {
-//            return null;
-//        }
-//    }
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_termdetails,menu);

@@ -1,3 +1,4 @@
+
 package UI;
 
 import android.content.Context;
@@ -16,6 +17,8 @@ import com.example.tracker.R;
 import java.util.List;
 
 import entities.Assessment;
+import entities.Course;
+import entities.Term;
 
 public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.AssessmentViewHolder> {
     private List<Assessment> mAssessments;
@@ -34,22 +37,19 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         private final TextView startDateTextView;
         private final TextView endDateTextView;
 
-        private AssessmentViewHolder(View itemView) {
+        private AssessmentViewHolder(@NonNull View itemView) {
             super(itemView);
             assessmentTitleTextView = itemView.findViewById(R.id.assessmentTitle);
             startDateTextView = itemView.findViewById(R.id.startDate);
             endDateTextView = itemView.findViewById(R.id.endDate);
-
-            itemView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position=getAdapterPosition();
                     Assessment assessment = mAssessments.get(position);
                     Intent intent = new Intent(context, AssessmentDetails.class);
                     intent.putExtra("assessmentID", assessment.getAssessmentID());
-                    // Put other assessment details in the intent
                     intent.putExtra("assessmentName", assessment.getAssessmentName());
-                    intent.putExtra("assessmentType", assessment.isAssessmentType());
-                    intent.putExtra("courseID", assessment.getCourseID());
                     intent.putExtra("startDate", assessment.getStart());
                     intent.putExtra("endDate", assessment.getEnd());
                     context.startActivity(intent);
@@ -67,24 +67,29 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
 
     @Override
     public void onBindViewHolder(@NonNull AssessmentViewHolder holder, int position) {
-        if (mAssessments != null && position < mAssessments.size()) {
+        if (mAssessments != null) {
             Assessment current = mAssessments.get(position);
-
-            if (current != null) {
-                holder.assessmentTitleTextView.setText(current.getAssessmentName() != null ? current.getAssessmentName() : "Assessment Name Unavailable");
-                holder.startDateTextView.setText("Start Date: " + current.getStart());
-                holder.endDateTextView.setText("End Date: " + current.getEnd());
-            } else {
-                Log.e(TAG, "Assessment object is null at position: " + position);
-                holder.assessmentTitleTextView.setText("Error: Assessment data not found");
-                holder.startDateTextView.setText("Error");
-                holder.endDateTextView.setText("Error");
-
-            }
-        } else {
-            Log.e(TAG, "Invalid assessment list or position: " + position);
-
+            String name=current.getAssessmentName();
+            holder.assessmentTitleTextView.setText(name);
         }
+        else{
+            holder.assessmentTitleTextView.setText("No Assessment");
+        }
+
+        holder.itemView.setOnClickListener(view -> {
+            Assessment assessment = mAssessments.get(position);
+
+            //DON'T REMEMBERT WHAT I WAS DOING HERE, BUT FIXING THESE REDS AND MAKE SURE THE GREENS EXIST SOMEWHERE
+            Intent intent = new Intent(context, CourseDetails.class);
+            intent.putExtra("id,", assessment.getCourseID());
+            intent.putExtra("name", assessment.getCourseName());
+            intent.putExtra("courseID", assessment.getCourseID());
+            intent.putExtra("editStartDate", assessment.getStartDate());
+            intent.putExtra("editEndDate", assessment.getEndDate());
+
+
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -97,3 +102,4 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         notifyDataSetChanged();
     }
 }
+

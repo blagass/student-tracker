@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,9 +34,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import database.Repository;
+import entities.Assessment;
 import entities.Course;
 import entities.Term;
 
@@ -42,6 +46,8 @@ public class CourseDetails extends AppCompatActivity {
     String name;
     int courseID;
     int termID;
+
+    int assessmentID;
     EditText editName;
     EditText editNote;
 
@@ -88,17 +94,14 @@ public class CourseDetails extends AppCompatActivity {
         statusSpinner = findViewById(R.id.statusSpinner);
 
 
-        // Initialize the ArrayAdapter (statusAdapter)
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.course_status_array, // Your array of course statuses
+                R.array.course_status_array,
                 android.R.layout.simple_spinner_item
         );
 
-        // Set the dropdown view resource for the adapter
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // Set the adapter for the spinner
         statusSpinner.setAdapter(statusAdapter);
         if (courseStatus != null) {
             int spinnerPosition = statusAdapter.getPosition(courseStatus);
@@ -110,14 +113,11 @@ public class CourseDetails extends AppCompatActivity {
             }
         }
 
-
         courseStart = findViewById(R.id.editStartDate);
         courseEnd = findViewById(R.id.editEndDate);
 
-
         courseStart.setText(courseStartDate);
         courseEnd.setText(courseEndDate);
-
 
         courseStart.setFocusable(false);
         courseStart.setClickable(true);
@@ -152,8 +152,6 @@ public class CourseDetails extends AppCompatActivity {
         courseEnd.setOnClickListener(v -> new DatePickerDialog(CourseDetails.this, endDatePickerListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
-        //
-
 
         //Instructor
         instructor = getIntent().getStringExtra("instructor");
@@ -163,31 +161,25 @@ public class CourseDetails extends AppCompatActivity {
         //Course and Term setup
         courseID = getIntent().getIntExtra("id,", -1);
         termID = getIntent().getIntExtra("termID", -1);
+        assessmentID = getIntent().getIntExtra("assessmentID", -1);
 
         editNote = findViewById(R.id.note);
 
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
-
-
-
         statusSpinner = findViewById(R.id.statusSpinner);
-//
-
-
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         statusSpinner.setAdapter(statusAdapter);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(courseID > 0) {
+                if (courseID > 0) {
                     Intent intent = new Intent(CourseDetails.this, AssessmentDetails.class);
                     intent.putExtra("courseID", courseID);
                     startActivity(intent);
-                }else{
+                } else {
                     Toast.makeText(CourseDetails.this, "Please save the course before adding an assessment.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -198,6 +190,17 @@ public class CourseDetails extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+        repository = new Repository(getApplication());
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<Assessment> filteredAssessment = new ArrayList<>();
+        for (Assessment assessment : repository.getmAllAssessments()) {
+            if (assessment.getAssessmentID() == assessmentID) filteredAssessment.add(assessment);
+        }
+        assessmentAdapter.setAssessments(filteredAssessment);
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -222,8 +225,6 @@ public class CourseDetails extends AppCompatActivity {
                     courseID = repository.getmAllCourses().get(repository.getmAllCourses().size() - 1).getCourseID() + 1;
 
                 String selectedStatus = statusSpinner.getSelectedItem().toString();
-
-                // course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus);
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
                 course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end);
@@ -276,4 +277,22 @@ public class CourseDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //trying ths out
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<Assessment> filteredAssessment = new ArrayList<>();
+        for (Assessment assessment : repository.getmAllAssessments()) {
+            if (assessment.getAssessmentID() == assessmentID) filteredAssessment.add(assessment);
+        }
+
+        assessmentAdapter.setAssessments(filteredAssessment);
+
+    }
 }

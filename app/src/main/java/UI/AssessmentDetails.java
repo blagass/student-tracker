@@ -1,6 +1,7 @@
 package UI;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,9 @@ import java.util.Locale;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,21 +39,20 @@ import entities.Term;
 public class AssessmentDetails extends AppCompatActivity {
     int assessmentId;
     String assessmentName;
-
     Boolean assessmentType;
-
-    Repository repository;
-    Assessment currentAssessment;
-
-    int courseID;
     String startDate;
     String endDate;
+
+    Assessment currentAssessment;
+    int courseID;
 
     EditText assessmentNameField;
     EditText startDateField;
     EditText endDateField;
 
     int numAssessments;
+
+    Repository repository;
 
     private final Calendar calendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener startDateListener;
@@ -61,27 +64,24 @@ public class AssessmentDetails extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_assessment_details);
 
-        Repository repository = new Repository(getApplication());
-
-        assessmentNameField=findViewById(R.id.assessmentNameField);
-        startDateField=findViewById(R.id.startDateField);
-        endDateField=findViewById(R.id.endDateField);
+        courseID = getIntent().getIntExtra("courseID", -1);
+        assessmentName = getIntent().getStringExtra("assessmentName");
 
         String assessmentStartDate = getIntent().getStringExtra("startDateField");
         String assessmentEndDate = getIntent().getStringExtra("endDateField");
 
-        assessmentNameField.setText(assessmentName);
+        assessmentNameField = findViewById(R.id.assessmentNameField);
+        startDateField = findViewById(R.id.startDateField);
+        endDateField = findViewById(R.id.endDateField);
 
-        startDateField=findViewById(R.id.startDateField);
-        endDateField=findViewById(R.id.endDateField);
         startDateField.setText(assessmentStartDate);
         endDateField.setText(assessmentEndDate);
+        assessmentNameField.setText(assessmentName);
 
         startDateField.setFocusable(false);
         endDateField.setFocusable(false);
         startDateField.setClickable(true);
         endDateField.setClickable(true);
-
 
         startDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -103,15 +103,17 @@ public class AssessmentDetails extends AppCompatActivity {
             }
         };
 
-        startDateField.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, startDateListener,
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show());
+        startDateField.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, startDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        endDateField.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, endDateListener,
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show());
+        endDateField.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, endDateListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show());
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
+        repository = new Repository(getApplication());
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -120,63 +122,41 @@ public class AssessmentDetails extends AppCompatActivity {
         dateEditText.setText(sdf.format(calendar.getTime()));
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_assessmentdetails,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_assessmentdetails, menu);
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(item.getItemId()==R.id.assessmentsave){
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.assessmentsave) {
             Assessment assessment;
-            if (assessmentId==-1){
-                if(repository.getmAllTerms().size()==0) assessmentId =1;
-                else assessmentId=repository.getmAllAssessments().get(repository.getmAllAssessments().size() - 1).getAssessmentID() +1;
+
+            if(assessmentId == -1) {
+
+                if (repository.getmAllAssessments().isEmpty())
+                    assessmentId = 1;
+                else
+                    assessmentId = repository.getmAllAssessments().get(repository.getmAllAssessments().size() - 1).getAssessmentID() + 1;
+
                 String start = startDateField.getText().toString();
                 String end = endDateField.getText().toString();
-                assessment = new Assessment(assessmentId,assessmentNameField.getText().toString(),true , courseID, start, end);
+                assessment = new Assessment(assessmentId, assessmentNameField.getText().toString(), false, courseID, start, end);
                 repository.insert(assessment);
                 this.finish();
-            }
-            else {
+            }else{
                 String start = startDateField.getText().toString();
                 String end = endDateField.getText().toString();
-                assessment = new Assessment(assessmentId,assessmentNameField.getText().toString(),true , courseID, start, end);
+                assessment = new Assessment(assessmentId, assessmentNameField.getText().toString(), false, courseID, start, end);
                 repository.update(assessment);
                 this.finish();
             }
+            return true;
         }
-        if(item.getItemId()==R.id.assessmentdelete){
-            for(Assessment assessment: repository.getmAllAssessments()){
-                if(assessment.getAssessmentID()==assessmentId)currentAssessment=assessment;
-            }
-            numAssessments=0;
-            for(Course course: repository.getmAllCourses()){
-                if(course.getTermID()==assessmentId)++numAssessments;
-            }
-            if(numAssessments==0){{
-                repository.delete(currentAssessment);
-                Toast.makeText(this, "Assessment Deleted", Toast.LENGTH_LONG).show();
-                AssessmentDetails.this.finish();
-            }
-            }
+
+
+        if (item.getItemId() == R.id.assessmentdelete) {
 
         }
         return true;
     }
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-//
-//        List<Course> filteredCourse = new ArrayList<>();
-//        for(Course course:repository.getmAllCourses()){
-//            if(course.getTermID() == termId) filteredCourse.add(course);
-//        }
-//
-//        courseAdapter.setCourses(filteredCourse);
-//
-//    }
-
 }

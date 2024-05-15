@@ -82,14 +82,15 @@ public class TermsList extends AppCompatActivity {
 //            Term term = new Term(0, "Art", , );
 //            repository.insert(term);
 //
-//            term = new Term(0,"Science", , );
+//            term = new Term(1,"Science", , );
 //            repository.insert(term);
 //
 //            Course course=new Course(0,"Paint 101","Dr.John",1 );
 //            repository.insert(course);
 //
-//            course=new Course(0,"Drawing 101","Dr.Jill",1);
+//            course=new Course(1,"Drawing 101","Dr.Jill",1);
 //            repository.insert(course);
+
 
             return true;
         }
