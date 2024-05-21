@@ -4,9 +4,5 @@
 
     <item android:title="Save Course"
         android:id="@+id/assessmentsave"/>
-    <item android:title="Share Note"
-        android:id="@+id/sharenote" />
-    <item android:title="Notify"
-        android:id="@+id/notify"/>
 
 </menu>

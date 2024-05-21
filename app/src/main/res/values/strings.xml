@@ -21,5 +21,6 @@
         <item>Dropped</item>
         <item>Plan to Take</item>
     </string-array>
+    <string name="title_activity_assessment_adapter">AssessmentAdapter</string>
 
 </resources>

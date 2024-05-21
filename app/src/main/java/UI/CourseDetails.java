@@ -6,12 +6,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,23 +21,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import database.Repository;
 import entities.Course;
-import entities.Term;
 
 public class CourseDetails extends AppCompatActivity {
     String name;
@@ -162,6 +155,19 @@ public class CourseDetails extends AppCompatActivity {
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(courseID>0){
+                    Intent intent = new Intent(CourseDetails.this,AssessmentDetails.class);
+                    intent.putExtra("courseID",courseID);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(CourseDetails.this,"Please save the course before adding an assessment",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -176,7 +182,7 @@ public class CourseDetails extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.coursesave) {
+        if (item.getItemId() == R.id.assessmentsave) {
 
             Course course;
             if (courseID == -1) {

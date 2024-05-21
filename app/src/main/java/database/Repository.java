@@ -6,18 +6,22 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import dao.AssessmentDAO;
 import dao.CourseDAO;
 import dao.TermDAO;
+import entities.Assessment;
 import entities.Course;
 import entities.Term;
 
 public class Repository {
     private CourseDAO mCourseDAO;
     private TermDAO mTermDAO;
-
+    private AssessmentDAO mAssessmentDAO;
 
     private List<Term> mAllTerms;
     private List<Course> mAllCourses;
+    private List<Assessment> mAllAssessments;
+
     private static int NUMBER_OF_THREADS=4;
     static final ExecutorService databaseExecutor= Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
@@ -141,6 +145,15 @@ public class Repository {
     }
 
     //ASSESSMENTS
-
+    public void insert(Assessment assessment){
+        databaseExecutor.execute(()->{
+            mAssessmentDAO.insert(assessment);
+        });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
