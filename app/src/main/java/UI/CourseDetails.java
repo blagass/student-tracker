@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Locale;
 
 import database.Repository;
-import entities.Assessment;
 import entities.Course;
 import entities.Term;
 
@@ -47,7 +46,6 @@ public class CourseDetails extends AppCompatActivity {
     int courseID;
     int termID;
 
-    int assessmentID;
     EditText editName;
     EditText editNote;
 
@@ -66,42 +64,49 @@ public class CourseDetails extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener startDatePickerListener;
     private DatePickerDialog.OnDateSetListener endDatePickerListener;
 
-    ArrayAdapter<CharSequence> statusAdapter;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
-
         FloatingActionButton fab = findViewById(R.id.addAssessmentButton);
 
         repository = new Repository(getApplication());
-
-
-        name = getIntent().getStringExtra("name");
         editName = findViewById(R.id.coursename);
+        courseStart = findViewById(R.id.editStartDate);
+        courseEnd = findViewById(R.id.editEndDate);
+
+        //Setting intents
+        String courseStartDate = getIntent().getStringExtra("editStartDate");
+        String courseEndDate = getIntent().getStringExtra("editEndDate");
+        name = getIntent().getStringExtra("name");
+        instructor = getIntent().getStringExtra("instructor");
+        courseID = getIntent().getIntExtra("id,", -1);
+        termID = getIntent().getIntExtra("termID", -1);
+
+        courseStart.setText(courseStartDate);
+        courseEnd.setText(courseEndDate);
+        editInstructor = findViewById(R.id.termEnd);
+        editNote = findViewById(R.id.note);
+
+        courseStart.setFocusable(false);
+        courseStart.setClickable(true);
+        courseEnd.setFocusable(false);
+        courseEnd.setClickable(true);
+
+        editInstructor.setText(instructor);
         editName.setText(name);
 
 
-        String courseStartDate = getIntent().getStringExtra("editStartDate");
-        String courseEndDate = getIntent().getStringExtra("editEndDate");
-
-        String courseStatus = getIntent().getStringExtra("status");
-
-
-        statusSpinner = findViewById(R.id.statusSpinner);
-
-
+        //Spinner
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this,
                 R.array.course_status_array,
                 android.R.layout.simple_spinner_item
         );
-
+        String courseStatus = getIntent().getStringExtra("status");
+        statusSpinner = findViewById(R.id.statusSpinner);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         statusSpinner.setAdapter(statusAdapter);
         if (courseStatus != null) {
             int spinnerPosition = statusAdapter.getPosition(courseStatus);
@@ -112,19 +117,20 @@ public class CourseDetails extends AppCompatActivity {
                 statusSpinner.setSelection(0);
             }
         }
+        statusSpinner = findViewById(R.id.statusSpinner);
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        statusSpinner.setAdapter(statusAdapter);
 
-        courseStart = findViewById(R.id.editStartDate);
-        courseEnd = findViewById(R.id.editEndDate);
 
-        courseStart.setText(courseStartDate);
-        courseEnd.setText(courseEndDate);
 
-        courseStart.setFocusable(false);
-        courseStart.setClickable(true);
-        courseEnd.setFocusable(false);
-        courseEnd.setClickable(true);
 
-        // Date Picker Setup
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+
         startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -145,6 +151,9 @@ public class CourseDetails extends AppCompatActivity {
             }
         };
 
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
         courseStart.setOnClickListener(v -> new DatePickerDialog(CourseDetails.this, startDatePickerListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
@@ -153,54 +162,6 @@ public class CourseDetails extends AppCompatActivity {
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
 
-        //Instructor
-        instructor = getIntent().getStringExtra("instructor");
-        editInstructor = findViewById(R.id.termEnd);
-        editInstructor.setText(instructor);
-
-        //Course and Term setup
-        courseID = getIntent().getIntExtra("id,", -1);
-        termID = getIntent().getIntExtra("termID", -1);
-        assessmentID = getIntent().getIntExtra("assessmentID", -1);
-
-        editNote = findViewById(R.id.note);
-
-        String myFormat = "MM/dd/yy";
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-        statusSpinner = findViewById(R.id.statusSpinner);
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        statusSpinner.setAdapter(statusAdapter);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (courseID > 0) {
-                    Intent intent = new Intent(CourseDetails.this, AssessmentDetails.class);
-                    intent.putExtra("courseID", courseID);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(CourseDetails.this, "Please save the course before adding an assessment.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
-        repository = new Repository(getApplication());
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-        recyclerView.setAdapter(assessmentAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<Assessment> filteredAssessment = new ArrayList<>();
-        for (Assessment assessment : repository.getmAllAssessments()) {
-            if (assessment.getAssessmentID() == assessmentID) filteredAssessment.add(assessment);
-        }
-        assessmentAdapter.setAssessments(filteredAssessment);
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -277,22 +238,5 @@ public class CourseDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //trying ths out
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-        recyclerView.setAdapter(assessmentAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        List<Assessment> filteredAssessment = new ArrayList<>();
-        for (Assessment assessment : repository.getmAllAssessments()) {
-            if (assessment.getAssessmentID() == assessmentID) filteredAssessment.add(assessment);
-        }
-
-        assessmentAdapter.setAssessments(filteredAssessment);
-
-    }
 }

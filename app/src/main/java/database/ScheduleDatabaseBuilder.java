@@ -6,10 +6,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import dao.AssessmentDAO;
 import dao.CourseDAO;
 import dao.TermDAO;
-import entities.Assessment;
 import entities.Course;
 import entities.Term;
 
@@ -19,8 +17,6 @@ public abstract class ScheduleDatabaseBuilder extends RoomDatabase {
     public abstract TermDAO termDAO(); //Term dao
 
     public abstract CourseDAO courseDAO(); //Course dao
-
-    public abstract AssessmentDAO assessmentDAO(); //Assessment dao
 
     private static volatile ScheduleDatabaseBuilder INSTANCE;
 

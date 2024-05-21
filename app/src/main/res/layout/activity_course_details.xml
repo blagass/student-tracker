@@ -8,157 +8,135 @@
     tools:context="UI.CourseDetails">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="431dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ScrollView
-            android:id="@+id/scrollview"
-            android:layout_width="430dp"
-            android:layout_height="504dp"
-            android:background="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.52">
+            app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:text="@string/name" />
+
+                <EditText
+                    android:id="@+id/coursename"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:hint="@string/course" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:text="@string/instructor" />
+
+                <EditText
+                    android:id="@+id/termEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:hint="@string/instructor_name" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-                <LinearLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:text="@string/note" />
+
+                <EditText
+                    android:id="@+id/note"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:text="@string/name" />
-
-                    <EditText
-                        android:id="@+id/coursename"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:hint="@string/course" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:text="@string/instructor" />
-
-                    <EditText
-                        android:id="@+id/termEnd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:hint="@string/instructor_name" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:text="@string/note" />
-
-                    <EditText
-                        android:id="@+id/note"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="text"
-                        android:textSize="24sp" />
-
-                </LinearLayout>
-
-                <Spinner
-                    android:id="@+id/statusSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/course_status_array"  />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:text="@string/date" />
-
-                    <EditText
-                        android:id="@+id/editStartDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:focusable="false"
-                        android:clickable="true"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:text="@string/end_date" />
-
-                    <EditText
-                        android:id="@+id/editEndDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:clickable="true" />
-
-
-                </LinearLayout>
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" >
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/assessmentRecycler"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingHorizontal="20dp"
-                            android:paddingVertical="20dp" />
-                    </LinearLayout>
-                </ScrollView>
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:textSize="24sp" />
 
             </LinearLayout>
 
+            <Spinner
+                android:id="@+id/statusSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/course_status_array" />
 
-        </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:text="@string/date" />
+
+                <EditText
+                    android:id="@+id/editStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:clickable="true"
+                    android:focusable="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:text="@string/end_date" />
+
+                <EditText
+                    android:id="@+id/editEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false" />
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/assessmentRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="20dp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/course_details"
             android:textSize="24sp"
-            app:layout_constraintBottom_toTopOf="@+id/scrollview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
