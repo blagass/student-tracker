@@ -126,6 +126,7 @@ public class TermDetails extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
         repository = new Repository(getApplication());
         final CourseAdapter courseAdapter = new CourseAdapter(this);

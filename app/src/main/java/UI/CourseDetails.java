@@ -68,6 +68,8 @@ public class CourseDetails extends AppCompatActivity {
         editName = findViewById(R.id.coursename);
         courseStart = findViewById(R.id.editStartDate);
         courseEnd = findViewById(R.id.editEndDate);
+        editInstructor = findViewById(R.id.termEnd);
+        editNote = findViewById(R.id.note);
 
         //Setting intents
         String courseStartDate = getIntent().getStringExtra("editStartDate");
@@ -79,16 +81,13 @@ public class CourseDetails extends AppCompatActivity {
 
         courseStart.setText(courseStartDate);
         courseEnd.setText(courseEndDate);
-        editInstructor = findViewById(R.id.termEnd);
-        editNote = findViewById(R.id.note);
+        editInstructor.setText(instructor);
+        editName.setText(name);
 
         courseStart.setFocusable(false);
         courseStart.setClickable(true);
         courseEnd.setFocusable(false);
         courseEnd.setClickable(true);
-
-        editInstructor.setText(instructor);
-        editName.setText(name);
 
 
         //Spinner
@@ -182,7 +181,7 @@ public class CourseDetails extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.assessmentsave) {
+        if (item.getItemId() == R.id.coursesave) {
 
             Course course;
             if (courseID == -1) {

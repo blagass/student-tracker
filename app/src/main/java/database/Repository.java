@@ -30,6 +30,7 @@ public class Repository {
         ScheduleDatabaseBuilder db=ScheduleDatabaseBuilder.getDatabase(application);
         mCourseDAO=db.courseDAO();
         mTermDAO=db.termDAO();
+        mAssessmentDAO=db.assessmentDAO();
     }
 
     //TERMS
@@ -149,6 +150,32 @@ public class Repository {
         databaseExecutor.execute(()->{
             mAssessmentDAO.insert(assessment);
         });
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Assessment>getmAllAssessments(){
+        databaseExecutor.execute(()->{
+            mAllAssessments=mAssessmentDAO.getAllAssessments();
+        });
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        return mAllAssessments;
+    }
+
+    public void update(Assessment assessment){
+        databaseExecutor.execute(()->{
+            mAssessmentDAO.update(assessment);
+        });
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

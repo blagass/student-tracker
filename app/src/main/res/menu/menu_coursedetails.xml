@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Save Course"
-        android:id="@+id/assessmentsave"/>
+        android:id="@+id/coursesave"/>
     <item android:title="Share Note"
         android:id="@+id/sharenote" />
     <item android:title="Notify"
