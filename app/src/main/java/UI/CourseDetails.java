@@ -164,7 +164,7 @@ public class CourseDetails extends AppCompatActivity {
             public void onClick(View v) {
                 if(courseID>0){
                     Intent intent = new Intent(CourseDetails.this,AssessmentDetails.class);
-                    intent.putExtra("courseID",courseID);
+                    intent.putExtra("courseId",courseID);
                     startActivity(intent);
                 }else{
                     Toast.makeText(CourseDetails.this,"Please save the course before adding an assessment",Toast.LENGTH_LONG).show();
@@ -173,13 +173,14 @@ public class CourseDetails extends AppCompatActivity {
         });
 
         RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+
         repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         List<Assessment> filteredAssessment = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
-            if(assessment.getCourseId()==courseID)filteredAssessment.add(assessment);
+            if(assessment.getAssessmentCourseId()==courseID)filteredAssessment.add(assessment);
         }
         assessmentAdapter.setAssessments(filteredAssessment);
 
@@ -259,22 +260,22 @@ public class CourseDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
-//        final CourseAdapter courseAdapter = new CourseAdapter(this);
-//        recyclerView.setAdapter(courseAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        List<Course> filteredCourse = new ArrayList<>();
-////        for(Course course:repository.getmAllCourses()){
-////            if(course.getTermID() == termId) filteredCourse.add(course);
-////        }
-//
-//        courseAdapter.setCourses(filteredCourse);
-//
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<Assessment> filteredAssessment = new ArrayList<>();
+        for(Assessment assessment:repository.getmAllAssessments()){
+            if(assessment.getAssessmentCourseId() == courseID) filteredAssessment.add(assessment);
+        }
+
+        assessmentAdapter.setAssessments(filteredAssessment);
+
+    }
 
 }

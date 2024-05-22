@@ -12,14 +12,16 @@ public class Assessment {
     private final String assessmentType;
     private final String assessmentStartDate;
     private final String assessmentEndDate;
+    private final int assessmentCourseId;
 
     //CONSTRUCTOR
-    public Assessment(int assessmentId, String assessmentName, String assessmentType, String assessmentStartDate, String assessmentEndDate) {
+    public Assessment(int assessmentId, String assessmentName, String assessmentType, String assessmentStartDate, String assessmentEndDate, int assessmentCourseId) {
         this.assessmentId=assessmentId;
         this.assessmentName=assessmentName;
         this.assessmentType=assessmentType;
         this.assessmentStartDate = assessmentStartDate;
         this.assessmentEndDate = assessmentEndDate;
+        this.assessmentCourseId = assessmentCourseId;
     }
     public String getAssessmentType() {
         return assessmentType;
@@ -43,4 +45,7 @@ public class Assessment {
         return assessmentName;
     }
 
+    public int getAssessmentCourseId() {
+        return assessmentCourseId;
+    }
 }

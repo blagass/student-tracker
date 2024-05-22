@@ -12,20 +12,15 @@ import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import database.Repository;
 import entities.Assessment;
-import entities.Course;
 
 public class AssessmentDetails extends AppCompatActivity {
     int assessmentId;
@@ -38,7 +33,7 @@ public class AssessmentDetails extends AppCompatActivity {
     private RadioButton performanceButton;
     private EditText assessmentStart, assessmentEnd;
     private final Calendar calendar = Calendar.getInstance();
-
+    int courseId;
     private DatePickerDialog.OnDateSetListener startDatePickerListener;
     private DatePickerDialog.OnDateSetListener endDatePickerListener;
 
@@ -56,9 +51,10 @@ public class AssessmentDetails extends AppCompatActivity {
         //gets
         assessmentId = getIntent().getIntExtra("id",-1);
         sAssessmentName =getIntent().getStringExtra("assessmentNameEdit");
+        courseId = getIntent().getIntExtra("courseId", -1);
 
-        String assessmentStartDate = getIntent().getStringExtra("etStartDate");
-        String assessmentEndDate = getIntent().getStringExtra("etEndDate");
+        String assessmentStartDate = getIntent().getStringExtra("startDate");
+        String assessmentEndDate = getIntent().getStringExtra("endDate");
 
         assessmentStart=findViewById(R.id.etStartDate);
         assessmentEnd=findViewById(R.id.etEndDate);
@@ -75,9 +71,36 @@ public class AssessmentDetails extends AppCompatActivity {
         //settexts
         etAssessmentName.setText(sAssessmentName);
 
+        //NEW CODE
+        assessmentButtonGroup = findViewById(R.id.assessmentButtonGroup);
+        objectiveButton = findViewById(R.id.objectiveButton);
+        performanceButton = findViewById(R.id.performanceButton);
 
+        
+        
+        assessmentButtonGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.objectiveButton) {
+                assessmentType = "Objective";
+            } else if (checkedId == R.id.performanceButton) {
+                assessmentType = "Performance";
+            }
+        });
 
+        if (assessmentId != -1) {
+            Assessment assessment = repository.getmAllAssessments().stream()
+                    .filter(a -> a.getAssessmentId() == assessmentId)
+                    .findFirst()
+                    .orElse(null);
 
+            if (assessment != null) {
+                loadDataIntoViews(assessment);
+            } 
+        } else if (courseId == -1) {
+
+            finish();
+            return;
+        }
+        
         startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -129,7 +152,7 @@ public class AssessmentDetails extends AppCompatActivity {
                     .orElse(null);
 
             if (assessment != null) {
-                assessmentType = assessment.getAssessmentType(); // Get the assessment type
+                assessmentType = assessment.getAssessmentType();
                 if (assessmentType.equals("Objective")) {
                     objectiveButton.setChecked(true);
                 } else {
@@ -139,6 +162,18 @@ public class AssessmentDetails extends AppCompatActivity {
         }
 
 
+    }
+
+    private void loadDataIntoViews(Assessment assessment) {
+        etAssessmentName.setText(assessment.getAssessmentName());
+        assessmentStart.setText(assessment.getAssessmentStartDate());
+        assessmentEnd.setText(assessment.getAssessmentEndDate());
+        assessmentType = assessment.getAssessmentType();
+        if (assessmentType.equals("Objective")) {
+            objectiveButton.setChecked(true);
+        } else {
+            performanceButton.setChecked(true);
+        }
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -163,14 +198,14 @@ public class AssessmentDetails extends AppCompatActivity {
 
                 String start = assessmentStart.getText().toString();
                 String end = assessmentEnd.getText().toString();
-                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end );
+                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );
                 repository.insert(assessment);
                 this.finish();;
             }
             else{
                 String start = assessmentStart.getText().toString();
                 String end = assessmentEnd.getText().toString();
-                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end);
+                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end,courseId);
                 repository.update(assessment);
                 this.finish();;
             }

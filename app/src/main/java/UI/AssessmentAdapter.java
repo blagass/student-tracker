@@ -35,25 +35,13 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
 
     @Override
     public void onBindViewHolder(@NonNull AssessmentViewHolder holder, int position) {
+
         if (mAssessments != null && position < mAssessments.size()) {
             Assessment current = mAssessments.get(position);
 
-            if (current != null) {
-                holder.assessmentNameView.setText(current.getAssessmentName());
-                holder.assessmentStartView.setText(current.getAssessmentStartDate());
-                holder.assessmentEndView.setText(current.getAssessmentEndDate());
-
-            } else {
-                holder.assessmentNameView.setText("Error: Assessment data not found");
-                holder.assessmentStartView.setText("Error");
-                holder.assessmentEndView.setText("Error");
-
-            }
-        } else {
-
-            holder.assessmentNameView.setText("Error: Assessment data not found");
-            holder.assessmentStartView.setText("Error");
-            holder.assessmentEndView.setText("Error");
+            holder.assessmentNameView.setText(current.getAssessmentName());
+            holder.assessmentStartView.setText("Start Date: " + current.getAssessmentStartDate());
+            holder.assessmentEndView.setText("End Date: " + current.getAssessmentEndDate());
         }
     }
 
@@ -71,9 +59,9 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
 
         public AssessmentViewHolder(@NonNull View itemView) {
             super(itemView);
-            assessmentNameView = itemView.findViewById(R.id.assessmentNameEdit);
-            assessmentStartView = itemView.findViewById(R.id.etStartDate);
-            assessmentEndView = itemView.findViewById(R.id.etEndDate);
+            assessmentNameView = itemView.findViewById(R.id.assessmentListName);
+            assessmentStartView = itemView.findViewById(R.id.assessmentListStart);
+            assessmentEndView = itemView.findViewById(R.id.assessmentListEnd);
 
             itemView.setOnClickListener(new View.OnClickListener(){
 
@@ -82,8 +70,9 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                     int position = getAdapterPosition();
                     final Assessment current = mAssessments.get(position);
                     Intent intent = new Intent(context, AssessmentDetails.class);
-                    intent.putExtra("assessmentId", current.getAssessmentId());
+                    intent.putExtra("id", current.getAssessmentId());
                     intent.putExtra("assessmentNameEdit", current.getAssessmentName());
+                    intent.putExtra("assessmentType", current.getAssessmentType());
                     intent.putExtra("etStartDate", current.getAssessmentStartDate());
                     intent.putExtra("etEndDate", current.getAssessmentEndDate());
                     context.startActivity(intent);
