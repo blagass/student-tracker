@@ -188,6 +188,7 @@ public class AssessmentDetails extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId()==R.id.assessmentsave){
+
             Assessment assessment;
 
             if(assessmentId == -1){
@@ -195,7 +196,6 @@ public class AssessmentDetails extends AppCompatActivity {
                     assessmentId=1;
                 else
                     assessmentId = repository.getmAllAssessments().get(repository.getmAllAssessments().size() -1).getAssessmentId() +1;
-
                 String start = assessmentStart.getText().toString();
                 String end = assessmentEnd.getText().toString();
                 assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );

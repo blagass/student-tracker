@@ -183,4 +183,15 @@ public class Repository {
         }
     }
 
+    public List<Assessment> getmAssociatedAssessments(int courseID) {
+        databaseExecutor.execute(() -> mAllAssessments = mAssessmentDAO.getAssessmentsForCourse(courseID));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return mAllAssessments;
+    }
+
+
 }

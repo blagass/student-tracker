@@ -10,6 +10,8 @@ import androidx.room.Update;
 import java.util.List;
 
 import entities.Assessment;
+import entities.Course;
+
 @Dao
 public interface AssessmentDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -20,5 +22,6 @@ public interface AssessmentDAO {
     void delete(Assessment assessment);
     @Query("SELECT * FROM ASSESSMENTS ORDER BY assessmentId ASC")
     List<Assessment> getAllAssessments();
-
+    @Query("SELECT * FROM assessments WHERE assessmentCourseId = :courseId ORDER BY assessmentID ASC")
+    List<Assessment> getAssessmentsForCourse(int courseId);
 }

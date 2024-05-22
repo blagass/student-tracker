@@ -275,7 +275,8 @@ public class CourseDetails extends AppCompatActivity {
         }
 
         assessmentAdapter.setAssessments(filteredAssessment);
-
+        List<Assessment> filteredAssessments = repository.getmAssociatedAssessments(courseID);
+        assessmentAdapter.setAssessments(filteredAssessments);
     }
 
 }
