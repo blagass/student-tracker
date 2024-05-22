@@ -1,28 +1,31 @@
 package UI;
 
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import database.Repository;
 import entities.Assessment;
+import entities.Course;
 
 public class AssessmentDetails extends AppCompatActivity {
     int assessmentId;
@@ -33,6 +36,11 @@ public class AssessmentDetails extends AppCompatActivity {
     private RadioGroup assessmentButtonGroup;
     private RadioButton objectiveButton;
     private RadioButton performanceButton;
+    private EditText assessmentStart, assessmentEnd;
+    private final Calendar calendar = Calendar.getInstance();
+
+    private DatePickerDialog.OnDateSetListener startDatePickerListener;
+    private DatePickerDialog.OnDateSetListener endDatePickerListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -49,8 +57,57 @@ public class AssessmentDetails extends AppCompatActivity {
         assessmentId = getIntent().getIntExtra("id",-1);
         sAssessmentName =getIntent().getStringExtra("assessmentNameEdit");
 
+        String assessmentStartDate = getIntent().getStringExtra("etStartDate");
+        String assessmentEndDate = getIntent().getStringExtra("etEndDate");
+
+        assessmentStart=findViewById(R.id.etStartDate);
+        assessmentEnd=findViewById(R.id.etEndDate);
+
+        assessmentStart.setText(assessmentStartDate);
+        assessmentEnd.setText(assessmentEndDate);
+
+        assessmentStart.setFocusable(false);
+        assessmentStart.setClickable(true);
+
+        assessmentEnd.setFocusable(false);
+        assessmentEnd.setClickable(true);
+
         //settexts
         etAssessmentName.setText(sAssessmentName);
+
+
+
+
+        startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(assessmentStart);
+            }
+        };
+
+        endDatePickerListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(assessmentEnd);
+            }
+        };
+
+        assessmentStart.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, startDatePickerListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        assessmentEnd.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, endDatePickerListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show());
+
+
+
 
         //TYPE
         assessmentButtonGroup = findViewById(R.id.assessmentButtonGroup);
@@ -64,6 +121,7 @@ public class AssessmentDetails extends AppCompatActivity {
                 assessmentType = "Performance";
             }
         });
+
         if (assessmentId != -1) {
             Assessment assessment = repository.getmAllAssessments().stream()
                     .filter(a -> a.getAssessmentId() == assessmentId)
@@ -79,6 +137,13 @@ public class AssessmentDetails extends AppCompatActivity {
                 }
             }
         }
+
+    }
+
+    private void updateDateLabel(EditText dateEditText) {
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        dateEditText.setText(sdf.format(calendar.getTime()));
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_assessmentdetails, menu);
@@ -95,12 +160,16 @@ public class AssessmentDetails extends AppCompatActivity {
                 else
                     assessmentId = repository.getmAllAssessments().get(repository.getmAllAssessments().size() -1).getAssessmentId() +1;
 
-                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType);
+                String start = assessmentStart.getText().toString();
+                String end = assessmentEnd.getText().toString();
+                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end );
                 repository.insert(assessment);
                 this.finish();;
             }
             else{
-                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType);
+                String start = assessmentStart.getText().toString();
+                String end = assessmentEnd.getText().toString();
+                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end);
                 repository.update(assessment);
                 this.finish();;
             }
@@ -109,5 +178,22 @@ public class AssessmentDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        List<Assessment> filteredAssessments = new ArrayList<>();
+        for(Assessment assessment:repository.getmAllAssessments()){
+            if(assessment.getAssessmentId() == assessmentId) filteredAssessments.add(assessment);
+        }
+
+        assessmentAdapter.setAssessments(filteredAssessments);
+
+    }
 
 }
