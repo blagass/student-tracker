@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,7 +77,11 @@ public class AssessmentDetails extends AppCompatActivity {
         objectiveButton = findViewById(R.id.objectiveButton);
         performanceButton = findViewById(R.id.performanceButton);
 
-        
+        courseId = getIntent().getIntExtra("courseId", -1);
+        if (courseId == -1) {
+            finish();
+            return;
+        }
         
         assessmentButtonGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.objectiveButton) {
@@ -200,14 +205,14 @@ public class AssessmentDetails extends AppCompatActivity {
                 String end = assessmentEnd.getText().toString();
                 assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );
                 repository.insert(assessment);
-                this.finish();;
+                this.finish();
             }
             else{
                 String start = assessmentStart.getText().toString();
                 String end = assessmentEnd.getText().toString();
                 assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end,courseId);
                 repository.update(assessment);
-                this.finish();;
+                this.finish();
             }
             return true;
         }

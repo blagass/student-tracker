@@ -13,7 +13,7 @@ import entities.Assessment;
 import entities.Course;
 import entities.Term;
 
-@Database(entities = {Term.class, Course.class, Assessment.class}, version = 4, exportSchema = false)
+@Database(entities = {Term.class, Course.class, Assessment.class}, version = 5, exportSchema = false)
 //Needs update everytime changes made to db
 public abstract class ScheduleDatabaseBuilder extends RoomDatabase {
     public abstract TermDAO termDAO(); //Term dao

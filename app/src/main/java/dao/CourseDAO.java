@@ -28,4 +28,6 @@ public interface CourseDAO {
     @Query("SELECT * FROM COURSES WHERE termID=:term ORDER BY courseID ASC")
     List<Course> getAssociatedCourses(int term);
 
+
+
 }

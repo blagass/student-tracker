@@ -62,6 +62,8 @@ public class CourseDetails extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener startDatePickerListener;
     private DatePickerDialog.OnDateSetListener endDatePickerListener;
 
+    ArrayAdapter<CharSequence> statusAdapter;
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,29 +98,48 @@ public class CourseDetails extends AppCompatActivity {
 
 
         //Spinner
+//        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
+//                this,
+//                R.array.course_status_array,
+//                android.R.layout.simple_spinner_item
+//        );
+//        String courseStatus = getIntent().getStringExtra("statusSpinner");
+//        statusSpinner = findViewById(R.id.statusSpinner);
+//        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        statusSpinner.setAdapter(statusAdapter);
+//        if (courseStatus != null) {
+//            int spinnerPosition = statusAdapter.getPosition(courseStatus);
+//            if (spinnerPosition >= 0) {
+//                statusSpinner.setSelection(spinnerPosition);
+//            } else {
+//
+//                statusSpinner.setSelection(0);
+//            }
+//        }
+
+        // Spinner Setup
+        statusSpinner = findViewById(R.id.statusSpinner);
+
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.course_status_array,
+                R.array.course_status_array, // Your string-array resource containing statuses
                 android.R.layout.simple_spinner_item
         );
-        String courseStatus = getIntent().getStringExtra("status");
-        statusSpinner = findViewById(R.id.statusSpinner);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(statusAdapter);
-        if (courseStatus != null) {
-            int spinnerPosition = statusAdapter.getPosition(courseStatus);
-            if (spinnerPosition >= 0) {
+
+        // Get initial status from intent and set selection (only in onCreate)
+        String initialCourseStatus = getIntent().getStringExtra("statusSpinner");
+        if (initialCourseStatus != null) {
+            int spinnerPosition = statusAdapter.getPosition(initialCourseStatus);
+            // Ensure the position is valid to prevent crashes
+            if (spinnerPosition >= 0 && spinnerPosition < statusAdapter.getCount()) {
                 statusSpinner.setSelection(spinnerPosition);
             } else {
-
-                statusSpinner.setSelection(0);
+                // Handle invalid position (e.g., set to a default value)
+                statusSpinner.setSelection(0); // Select the first item by default
             }
         }
-        statusSpinner = findViewById(R.id.statusSpinner);
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        statusSpinner.setAdapter(statusAdapter);
-
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -172,18 +193,25 @@ public class CourseDetails extends AppCompatActivity {
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+//        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+//
+//        repository = new Repository(getApplication());
+//        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+//        recyclerView.setAdapter(assessmentAdapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        List<Assessment> filteredAssessment = new ArrayList<>();
+//        for(Assessment assessment:repository.getmAllAssessments()){
+//            if(assessment.getAssessmentCourseId()==courseID)filteredAssessment.add(assessment);
+//        }
+//        assessmentAdapter.setAssessments(filteredAssessment);
 
         repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<Assessment> filteredAssessment = new ArrayList<>();
-        for(Assessment assessment:repository.getmAllAssessments()){
-            if(assessment.getAssessmentCourseId()==courseID)filteredAssessment.add(assessment);
-        }
-        assessmentAdapter.setAssessments(filteredAssessment);
 
+        List<Assessment> allAssessments = repository.getmAllAssessments();
+        assessmentAdapter.setAssessments(allAssessments);
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -264,18 +292,19 @@ public class CourseDetails extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<Assessment> filteredAssessment = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
-            if(assessment.getAssessmentCourseId() == courseID) filteredAssessment.add(assessment);
+            if(assessment.getAssessmentCourseId() == courseID)
+                filteredAssessment.add(assessment);
         }
-
         assessmentAdapter.setAssessments(filteredAssessment);
 
     }
+
 
 }
