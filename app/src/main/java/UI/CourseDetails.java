@@ -21,17 +21,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tracker.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import database.Repository;
+import entities.Assessment;
 import entities.Course;
 
 public class CourseDetails extends AppCompatActivity {
@@ -167,6 +172,17 @@ public class CourseDetails extends AppCompatActivity {
             }
         });
 
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+        repository = new Repository(getApplication());
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        List<Assessment> filteredAssessment = new ArrayList<>();
+        for(Assessment assessment:repository.getmAllAssessments()){
+            if(assessment.getCourseId()==courseID)filteredAssessment.add(assessment);
+        }
+        assessmentAdapter.setAssessments(filteredAssessment);
+
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -243,5 +259,22 @@ public class CourseDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
+//        final CourseAdapter courseAdapter = new CourseAdapter(this);
+//        recyclerView.setAdapter(courseAdapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        List<Course> filteredCourse = new ArrayList<>();
+////        for(Course course:repository.getmAllCourses()){
+////            if(course.getTermID() == termId) filteredCourse.add(course);
+////        }
+//
+//        courseAdapter.setCourses(filteredCourse);
+//
+//    }
 
 }

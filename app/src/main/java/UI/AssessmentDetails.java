@@ -138,6 +138,7 @@ public class AssessmentDetails extends AppCompatActivity {
             }
         }
 
+
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -178,22 +179,5 @@ public class AssessmentDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-        recyclerView.setAdapter(assessmentAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        List<Assessment> filteredAssessments = new ArrayList<>();
-        for(Assessment assessment:repository.getmAllAssessments()){
-            if(assessment.getAssessmentId() == assessmentId) filteredAssessments.add(assessment);
-        }
-
-        assessmentAdapter.setAssessments(filteredAssessments);
-
-    }
 
 }
