@@ -71,6 +71,8 @@ public class CourseDetails extends AppCompatActivity {
         setContentView(R.layout.activity_course_details);
         FloatingActionButton fab = findViewById(R.id.addAssessmentButton);
 
+        recyclerView=findViewById(R.id.assessmentRecycler); //ADDED THIS NEW
+
         repository = new Repository(getApplication());
         editName = findViewById(R.id.coursename);
         courseStart = findViewById(R.id.editStartDate);
