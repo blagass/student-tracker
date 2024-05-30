@@ -11,15 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/termTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/term_details"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.113" />
+
+
         <ScrollView
             android:id="@+id/scrollview"
-            android:layout_width="409dp"
-            android:layout_height="200dp"
-            android:background="#03A9F4"
+            android:layout_width="412dp"
+            android:layout_height="562dp"
+            android:background="#D2F1FF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3">
+            app:layout_constraintVertical_bias="0.964">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,9 +73,9 @@
                         android:id="@+id/termStart"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:hint="Date"
+                        android:clickable="true"
                         android:focusable="false"
-                        android:clickable="true" />
+                        android:hint="Date" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -79,30 +93,20 @@
                         android:id="@+id/termEnd"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:focusable="false"
                         android:clickable="true"
+                        android:focusable="false"
                         android:hint="Date" />
                 </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/partrecyclerview"
+                    android:layout_width="409dp"
+                    android:layout_height="296dp" />
 
             </LinearLayout>
 
 
         </ScrollView>
-
-
-
-        <TextView
-            android:id="@+id/termTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/term_details"
-            android:textSize="34sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.113" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addTermDetails"
@@ -115,14 +119,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/partrecyclerview"
-            android:layout_width="409dp"
-            android:layout_height="296dp"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="361dp"
-            app:layout_constraintTop_toBottomOf="@+id/scrollview"
-            app:layout_constraintLeft_toLeftOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

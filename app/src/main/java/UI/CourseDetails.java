@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,9 +54,6 @@ public class CourseDetails extends AppCompatActivity {
     String instructor;
     EditText editInstructor;
     Spinner statusSpinner;
-
-    TextView dateDisplay;
-
     Repository repository;
 
     private EditText courseStart, courseEnd;
@@ -247,6 +245,7 @@ public class CourseDetails extends AppCompatActivity {
                 String note =  editNote.getText().toString();
                 course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end,note);
                 repository.insert(course);
+                dateSave();
                 this.finish();
             } else {
                 String selectedStatus = statusSpinner.getSelectedItem().toString();
@@ -255,6 +254,7 @@ public class CourseDetails extends AppCompatActivity {
                 String note =  editNote.getText().toString();
                 course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end, note);
                 repository.update(course);
+                dateSave();
                 this.finish();
             }
             return true;
@@ -273,22 +273,43 @@ public class CourseDetails extends AppCompatActivity {
             startActivity(shareIntent);
             return true;
         }
+
         if (item.getItemId() == R.id.notify) {
-            String dateFromScreen = dateDisplay.getText().toString();
+            String startText = courseStart.getText().toString();
+            String endText = courseEnd.getText().toString();
             String myFormat = "MM/dd/yy";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            Date myDate = null;
+            Date dStartDate = null;
+            Date dEndDate = null;
+
+
             try {
-                myDate = sdf.parse(dateFromScreen);
+                dStartDate = sdf.parse(startText);
+                dEndDate = sdf.parse(endText);
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                Toast.makeText(CourseDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+                return true;
             }
-            Long trigger = myDate.getTime();
-            Intent intent = new Intent(CourseDetails.this, MyReceiver.class);
-            intent.putExtra("key", "Heres a test message");
-            PendingIntent sender = PendingIntent.getBroadcast(CourseDetails.this, ++MainActivity.numAlert, intent, PendingIntent.FLAG_IMMUTABLE);
+
+            // Calculate alarm triggers (time since boot, including sleep)
+            long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
+            long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
+
+            // Create intents and pending intents with unique request codes
+            Intent startIntent = new Intent(CourseDetails.this, MyReceiver.class);
+            startIntent.putExtra("key", "Course '" + editName.getText().toString() + "' starting");
+            PendingIntent startSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent endIntent = new Intent(CourseDetails.this, MyReceiver.class);
+            endIntent.putExtra("key", "Course '" + editName.getText().toString() + "' ending");
+            PendingIntent endSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Set the alarms
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
+            Toast.makeText(CourseDetails.this, "Notifications set for course start and end dates", Toast.LENGTH_SHORT).show();
+
             return true;
         }
 
@@ -314,5 +335,40 @@ public class CourseDetails extends AppCompatActivity {
 
     }
 
+    public void dateSave(){
+        String startText = courseStart.getText().toString();
+        String endText = courseEnd.getText().toString();
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        Date dStartDate = null;
+        Date dEndDate = null;
 
+        // Date parsing with error handling
+        try {
+            dStartDate = sdf.parse(startText);
+            dEndDate = sdf.parse(endText);
+        } catch (ParseException e) {
+            Toast.makeText(CourseDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+        }
+
+        // Calculate alarm triggers (time since boot, including sleep)
+        long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
+        long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
+
+        // Create intents and pending intents with unique request codes
+        Intent startIntent = new Intent(CourseDetails.this, MyReceiver.class);
+        startIntent.putExtra("key", "Course '" + editName.getText().toString() + "' starting");
+        PendingIntent startSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent endIntent = new Intent(CourseDetails.this, MyReceiver.class);
+        endIntent.putExtra("key", "Course '" + editName.getText().toString() + "' ending");
+        PendingIntent endSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Set the alarms
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
+        Toast.makeText(CourseDetails.this, "Notifications set for course start and end dates", Toast.LENGTH_SHORT).show();
+
+    }
 }

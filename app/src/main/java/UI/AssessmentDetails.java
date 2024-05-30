@@ -1,8 +1,13 @@
 package UI;
 
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
@@ -16,8 +21,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tracker.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import database.Repository;
@@ -205,6 +212,7 @@ public class AssessmentDetails extends AppCompatActivity {
                 String end = assessmentEnd.getText().toString();
                 assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );
                 repository.insert(assessment);
+                dateSave();
                 this.finish();
             }
             else{
@@ -212,6 +220,7 @@ public class AssessmentDetails extends AppCompatActivity {
                 String end = assessmentEnd.getText().toString();
                 assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end,courseId);
                 repository.update(assessment);
+                dateSave();
                 this.finish();
             }
             return true;
@@ -219,5 +228,40 @@ public class AssessmentDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void dateSave(){
+        String startText = assessmentStart.getText().toString();
+        String endText = assessmentEnd.getText().toString();
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        Date dStartDate = null;
+        Date dEndDate = null;
 
+        // Date parsing with error handling
+        try {
+            dStartDate = sdf.parse(startText);
+            dEndDate = sdf.parse(endText);
+        } catch (ParseException e) {
+            Toast.makeText(AssessmentDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+        }
+
+        // Calculate alarm triggers (time since boot, including sleep)
+        long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
+        long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
+
+        // Create intents and pending intents with unique request codes
+        Intent startIntent = new Intent(AssessmentDetails.this, MyReceiver.class);
+        startIntent.putExtra("key", "Assessment '" + etAssessmentName.getText().toString() + "' starting");
+        PendingIntent startSender = PendingIntent.getBroadcast(AssessmentDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent endIntent = new Intent(AssessmentDetails.this, MyReceiver.class);
+        endIntent.putExtra("key", "Assessment '" + etAssessmentName.getText().toString() + "' ending");
+        PendingIntent endSender = PendingIntent.getBroadcast(AssessmentDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Set the alarms
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
+        Toast.makeText(AssessmentDetails.this, "Notifications are set for Assessment start and end dates", Toast.LENGTH_SHORT).show();
+
+    }
 }
