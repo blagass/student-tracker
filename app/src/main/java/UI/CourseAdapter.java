@@ -43,6 +43,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     intent.putExtra("statusSpinner",current.getSelectedStatus());
                     intent.putExtra("editStartDate", current.getStartDate());
                     intent.putExtra("editEndDate", current.getEndDate());
+                    intent.putExtra("note",current.getNote());
                     context.startActivity(intent);
                 }
             });
@@ -86,7 +87,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             intent.putExtra("editStartDate", course.getStartDate());
             intent.putExtra("editEndDate", course.getEndDate());
             intent.putExtra("statusSpinner", course.getSelectedStatus());
-
+            intent.putExtra("note",course.getNote());
 
             context.startActivity(intent);
         });

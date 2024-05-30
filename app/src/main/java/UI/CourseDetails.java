@@ -44,6 +44,8 @@ public class CourseDetails extends AppCompatActivity {
     int courseID;
     int termID;
 
+    String note;
+
     EditText editName;
     EditText editNote;
 
@@ -87,11 +89,13 @@ public class CourseDetails extends AppCompatActivity {
         instructor = getIntent().getStringExtra("instructor");
         courseID = getIntent().getIntExtra("id,", -1);
         termID = getIntent().getIntExtra("termID", -1);
+        note = getIntent().getStringExtra("note");
 
         courseStart.setText(courseStartDate);
         courseEnd.setText(courseEndDate);
         editInstructor.setText(instructor);
         editName.setText(name);
+        editNote.setText(note);
 
         courseStart.setFocusable(false);
         courseStart.setClickable(true);
@@ -240,14 +244,16 @@ public class CourseDetails extends AppCompatActivity {
                 String selectedStatus = statusSpinner.getSelectedItem().toString();
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
-                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end);
+                String note =  editNote.getText().toString();
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end,note);
                 repository.insert(course);
                 this.finish();
             } else {
                 String selectedStatus = statusSpinner.getSelectedItem().toString();
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
-                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end);
+                String note =  editNote.getText().toString();
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end, note);
                 repository.update(course);
                 this.finish();
             }
@@ -268,7 +274,7 @@ public class CourseDetails extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.notify) {
-            String dateFromScreen = dateDisplay.getText().toString(); //not sure I'm pulling the right thing
+            String dateFromScreen = dateDisplay.getText().toString();
             String myFormat = "MM/dd/yy";
             SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
             Date myDate = null;
