@@ -197,17 +197,6 @@ public class CourseDetails extends AppCompatActivity {
             }
         });
 
-//        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
-//
-//        repository = new Repository(getApplication());
-//        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-//        recyclerView.setAdapter(assessmentAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        List<Assessment> filteredAssessment = new ArrayList<>();
-//        for(Assessment assessment:repository.getmAllAssessments()){
-//            if(assessment.getAssessmentCourseId()==courseID)filteredAssessment.add(assessment);
-//        }
-//        assessmentAdapter.setAssessments(filteredAssessment);
 
         repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
