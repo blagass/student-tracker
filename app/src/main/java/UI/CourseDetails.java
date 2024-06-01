@@ -64,6 +64,8 @@ public class CourseDetails extends AppCompatActivity {
 
     ArrayAdapter<CharSequence> statusAdapter;
     RecyclerView recyclerView;
+    Course currentCourse;
+    int numAssessments;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -255,6 +257,25 @@ public class CourseDetails extends AppCompatActivity {
                 this.finish();
             }
             return true;
+        }
+
+        if (item.getItemId() == R.id.coursedelete) {
+            for (Course course : repository.getmAllCourses()) {
+                if (course.getCourseID() == courseID) {
+                    currentCourse = course;
+                }
+            }
+
+            numAssessments = repository.getmAssociatedAssessments(courseID).size(); // Count associated assessments directly
+
+            if (numAssessments == 0) {
+                repository.delete(currentCourse);
+                Toast.makeText(this, "Course Deleted", Toast.LENGTH_LONG).show(); // Display "Course Deleted"
+                CourseDetails.this.finish();
+            } else {
+                Toast.makeText(CourseDetails.this, "Cannot delete a course with associated assessments", Toast.LENGTH_SHORT).show();
+            }
+            return true; // Added to indicate the item was handled
         }
 
         if (item.getItemId() == R.id.sharenote) {

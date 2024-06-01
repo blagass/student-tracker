@@ -8,5 +8,7 @@
         android:id="@+id/sharenote" />
     <item android:title="Notify"
         android:id="@+id/notify"/>
+    <item android:title="Delete Course"
+        android:id="@+id/coursedelete" />
 
 </menu>
