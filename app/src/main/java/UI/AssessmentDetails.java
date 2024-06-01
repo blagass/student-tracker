@@ -109,6 +109,7 @@ public class AssessmentDetails extends AppCompatActivity {
 
             if (assessment != null) {
                 loadDataIntoViews(assessment);
+                courseId = assessment.getAssessmentCourseId();
             } else {
                 Toast.makeText(this, "Assessment not found", Toast.LENGTH_SHORT).show();
                 finish();
