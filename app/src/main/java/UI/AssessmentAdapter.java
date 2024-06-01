@@ -42,6 +42,17 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
             holder.assessmentNameView.setText(current.getAssessmentName());
             holder.assessmentStartView.setText("Start Date: " + current.getAssessmentStartDate());
             holder.assessmentEndView.setText("End Date: " + current.getAssessmentEndDate());
+
+            holder.itemView.setOnClickListener(view ->{
+                Assessment assessment =mAssessments.get(position);
+                Intent intent = new Intent(context, AssessmentDetails.class);
+                intent.putExtra("id", assessment.getAssessmentId());
+                intent.putExtra("assessmentNameEdit", assessment.getAssessmentName());
+                intent.putExtra("assessmentType", assessment.getAssessmentType());
+                intent.putExtra("etStartDate", assessment.getAssessmentStartDate());
+                intent.putExtra("etEndDate", assessment.getAssessmentEndDate());
+                context.startActivity(intent);
+            });
         }
     }
 

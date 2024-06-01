@@ -282,11 +282,11 @@ public class CourseDetails extends AppCompatActivity {
                 return true;
             }
 
-            // Calculate alarm triggers (time since boot, including sleep)
+
             long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
             long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
 
-            // Create intents and pending intents with unique request codes
+
             Intent startIntent = new Intent(CourseDetails.this, MyReceiver.class);
             startIntent.putExtra("key", "Course '" + editName.getText().toString() + "' starting");
             PendingIntent startSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -295,7 +295,7 @@ public class CourseDetails extends AppCompatActivity {
             endIntent.putExtra("key", "Course '" + editName.getText().toString() + "' ending");
             PendingIntent endSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            // Set the alarms
+
             AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
@@ -311,19 +311,6 @@ public class CourseDetails extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
-//        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-//        recyclerView.setAdapter(assessmentAdapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        List<Assessment> filteredAssessment = new ArrayList<>();
-//        for(Assessment assessment:repository.getmAllAssessments()){
-//            if(assessment.getAssessmentCourseId() == courseID)
-//                filteredAssessment.add(assessment);
-//        }
-//        assessmentAdapter.setAssessments(filteredAssessment);
-
 
         repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
@@ -345,7 +332,6 @@ public class CourseDetails extends AppCompatActivity {
         Date dStartDate = null;
         Date dEndDate = null;
 
-        // Date parsing with error handling
         try {
             dStartDate = sdf.parse(startText);
             dEndDate = sdf.parse(endText);
@@ -353,11 +339,11 @@ public class CourseDetails extends AppCompatActivity {
             Toast.makeText(CourseDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
         }
 
-        // Calculate alarm triggers (time since boot, including sleep)
+
         long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
         long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
 
-        // Create intents and pending intents with unique request codes
+
         Intent startIntent = new Intent(CourseDetails.this, MyReceiver.class);
         startIntent.putExtra("key", "Course '" + editName.getText().toString() + "' starting");
         PendingIntent startSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -366,7 +352,7 @@ public class CourseDetails extends AppCompatActivity {
         endIntent.putExtra("key", "Course '" + editName.getText().toString() + "' ending");
         PendingIntent endSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Set the alarms
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
