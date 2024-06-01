@@ -187,11 +187,11 @@ public class TermDetails extends AppCompatActivity {
 
         }else{
                 Toast.makeText(TermDetails.this, "Can't delete a term with a course", Toast.LENGTH_SHORT).show();
-
             }
-
     }
-        return true;
+
+        return super.onOptionsItemSelected(item);
+
     }
 
     @Override
@@ -210,4 +210,6 @@ public class TermDetails extends AppCompatActivity {
 
         courseAdapter.setCourses(filteredCourse);
 
-    }}
+    }
+
+}
