@@ -71,7 +71,7 @@ public class CourseDetails extends AppCompatActivity {
         setContentView(R.layout.activity_course_details);
         FloatingActionButton fab = findViewById(R.id.addAssessmentButton);
 
-        recyclerView=findViewById(R.id.assessmentRecycler); //ADDED THIS NEW
+        //recyclerView=findViewById(R.id.assessmentRecycler); //ADDED THIS NEW
 
         repository = new Repository(getApplication());
         editName = findViewById(R.id.coursename);
@@ -197,11 +197,17 @@ public class CourseDetails extends AppCompatActivity {
             }
         });
 
+        recyclerView = findViewById(R.id.assessmentRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        repository = new Repository(getApplication());
+
+
+
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        repository = new Repository(getApplication());
+
         List<Assessment> filteredAssessments = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
             if(assessment.getAssessmentCourseId()==courseID)filteredAssessments.add(assessment);
@@ -311,11 +317,12 @@ public class CourseDetails extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        repository = new Repository(getApplication());
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+       // repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         List<Assessment> filteredAssessments = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
             if(assessment.getAssessmentCourseId()==courseID)filteredAssessments.add(assessment);

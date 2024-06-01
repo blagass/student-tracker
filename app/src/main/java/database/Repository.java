@@ -83,7 +83,14 @@ public class Repository {
     }
 
     //COURSE
-
+    public Course getCourseById(int courseId) {
+        for (Course course : getmAllCourses()) {
+            if (course.getCourseID() == courseId) {
+                return course;
+            }
+        }
+        return null;
+    }
     public List<Course>getmAllCourses(){
         databaseExecutor.execute(()->{
             mAllCourses=mCourseDAO.getAllCourses();

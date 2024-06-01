@@ -85,7 +85,10 @@ public class AssessmentDetails extends AppCompatActivity {
         performanceButton = findViewById(R.id.performanceButton);
 
         courseId = getIntent().getIntExtra("courseId", -1);
-        if (courseId == -1) {
+        assessmentId = getIntent().getIntExtra("id", -1);
+
+
+        if (courseId == -1 && assessmentId == -1) {
             finish();
             return;
         }
@@ -106,11 +109,10 @@ public class AssessmentDetails extends AppCompatActivity {
 
             if (assessment != null) {
                 loadDataIntoViews(assessment);
-            } 
-        } else if (courseId == -1) {
-
-            finish();
-            return;
+            } else {
+                Toast.makeText(this, "Assessment not found", Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
         
         startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
