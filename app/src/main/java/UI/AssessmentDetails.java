@@ -92,7 +92,7 @@ public class AssessmentDetails extends AppCompatActivity {
             finish();
             return;
         }
-        
+
         assessmentButtonGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.objectiveButton) {
                 assessmentType = "Objective";
@@ -205,29 +205,63 @@ public class AssessmentDetails extends AppCompatActivity {
 
             Assessment assessment;
 
-            if(assessmentId == -1){
-                if(repository.getmAllAssessments().isEmpty())
-                    assessmentId=1;
-                else
-                    assessmentId = repository.getmAllAssessments().get(repository.getmAllAssessments().size() -1).getAssessmentId() +1;
-                String start = assessmentStart.getText().toString();
-                String end = assessmentEnd.getText().toString();
-                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );
+//            if(assessmentId == -1){
+//                if(repository.getmAllAssessments().isEmpty())
+//                    assessmentId=1;
+//                else
+//                    assessmentId = repository.getmAllAssessments().get(repository.getmAllAssessments().size() -1).getAssessmentId() +1;
+//                String start = assessmentStart.getText().toString();
+//                String end = assessmentEnd.getText().toString();
+//                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );
+//                repository.insert(assessment);
+//                dateSave();
+//                this.finish();
+//            }
+//            else{
+//                String start = assessmentStart.getText().toString();
+//                String end = assessmentEnd.getText().toString();
+//                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end,courseId);
+//                repository.update(assessment);
+//                dateSave();
+//                this.finish();
+//            }
+//            return true;
+            String start = assessmentStart.getText().toString();
+            String end = assessmentEnd.getText().toString();
+
+            if (assessmentId == -1) {
+
+                courseId = getIntent().getIntExtra("courseId", -1);
+
+
+                if (courseId == -1) {
+                    Toast.makeText(this, "Wrong course ID", Toast.LENGTH_SHORT).show();
+                    finish();
+                    return true;
+                }
+
+                int newAssessmentId = 0;
+                for (Assessment a : repository.getmAllAssessments()) {
+                    if (a.getAssessmentCourseId() == courseId && a.getAssessmentId() > newAssessmentId) {
+                        newAssessmentId = a.getAssessmentId();
+                    }
+                }
+                newAssessmentId++;
+
+                assessment = new Assessment(newAssessmentId, etAssessmentName.getText().toString(), assessmentType, start, end, courseId);
                 repository.insert(assessment);
-                dateSave();
-                this.finish();
-            }
-            else{
-                String start = assessmentStart.getText().toString();
-                String end = assessmentEnd.getText().toString();
-                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end,courseId);
+            } else {
+
+                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(), assessmentType, start, end, courseId);
                 repository.update(assessment);
-                dateSave();
-                this.finish();
             }
+
+            dateSave();
+            setResult(RESULT_OK);
+            this.finish();
             return true;
         }
-//        if(item.getItemId()==R)
+
         return super.onOptionsItemSelected(item);
     }
 
