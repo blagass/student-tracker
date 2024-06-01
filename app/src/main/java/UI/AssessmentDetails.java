@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import database.Repository;
 import entities.Assessment;
+import entities.Course;
 
 public class AssessmentDetails extends AppCompatActivity {
     int assessmentId;
@@ -44,6 +45,8 @@ public class AssessmentDetails extends AppCompatActivity {
     int courseId;
     private DatePickerDialog.OnDateSetListener startDatePickerListener;
     private DatePickerDialog.OnDateSetListener endDatePickerListener;
+
+    Assessment currentAssessment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -202,6 +205,24 @@ public class AssessmentDetails extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
+
+        if (item.getItemId() == R.id.assessmentdelete) {
+            for (Assessment assessment : repository.getmAllAssessments()) {
+                if (assessment.getAssessmentId() == assessmentId) {
+                    currentAssessment = assessment;
+                    break;
+                }
+            }
+            if (currentAssessment != null) {
+                repository.delete(currentAssessment);
+                Toast.makeText(this, "Assessment Deleted", Toast.LENGTH_LONG).show();
+                AssessmentDetails.this.finish();
+            } else {
+                Toast.makeText(this, "Assessment not found", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+
         if(item.getItemId()==R.id.assessmentsave){
 
             Assessment assessment;

@@ -266,16 +266,15 @@ public class CourseDetails extends AppCompatActivity {
                 }
             }
 
-            numAssessments = repository.getmAssociatedAssessments(courseID).size(); // Count associated assessments directly
-
+            numAssessments = repository.getmAssociatedAssessments(courseID).size();
             if (numAssessments == 0) {
                 repository.delete(currentCourse);
-                Toast.makeText(this, "Course Deleted", Toast.LENGTH_LONG).show(); // Display "Course Deleted"
+                Toast.makeText(this, "Course Deleted", Toast.LENGTH_LONG).show();
                 CourseDetails.this.finish();
             } else {
-                Toast.makeText(CourseDetails.this, "Cannot delete a course with associated assessments", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CourseDetails.this, "Cannot delete a course with an assessment", Toast.LENGTH_SHORT).show();
             }
-            return true; // Added to indicate the item was handled
+            return true;
         }
 
         if (item.getItemId() == R.id.sharenote) {

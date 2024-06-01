@@ -200,4 +200,15 @@ public class Repository {
         return mAllAssessments;
     }
 
+    public void delete(Assessment assessment) {
+        databaseExecutor.execute(() -> {
+            mAssessmentDAO.delete(assessment);
+        });
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
