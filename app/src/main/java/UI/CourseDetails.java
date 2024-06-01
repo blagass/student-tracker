@@ -202,9 +202,11 @@ public class CourseDetails extends AppCompatActivity {
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        List<Assessment> allAssessments = repository.getmAllAssessments();
-        assessmentAdapter.setAssessments(allAssessments);
+        List<Assessment> filteredAssessments = new ArrayList<>();
+        for(Assessment assessment:repository.getmAllAssessments()){
+            if(assessment.getAssessmentCourseId()==courseID)filteredAssessments.add(assessment);
+        }
+        assessmentAdapter.setAssessments(filteredAssessments);
     }
 
     private void updateDateLabel(EditText dateEditText) {
@@ -311,16 +313,27 @@ public class CourseDetails extends AppCompatActivity {
         super.onResume();
 
 
+//        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+//        recyclerView.setAdapter(assessmentAdapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//        List<Assessment> filteredAssessment = new ArrayList<>();
+//        for(Assessment assessment:repository.getmAllAssessments()){
+//            if(assessment.getAssessmentCourseId() == courseID)
+//                filteredAssessment.add(assessment);
+//        }
+//        assessmentAdapter.setAssessments(filteredAssessment);
+
+
+        repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        List<Assessment> filteredAssessment = new ArrayList<>();
+        List<Assessment> filteredAssessments = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
-            if(assessment.getAssessmentCourseId() == courseID)
-                filteredAssessment.add(assessment);
+            if(assessment.getAssessmentCourseId()==courseID)filteredAssessments.add(assessment);
         }
-        assessmentAdapter.setAssessments(filteredAssessment);
+        assessmentAdapter.setAssessments(filteredAssessments);
 
     }
 
