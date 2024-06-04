@@ -6,6 +6,6 @@
           android:id="@+id/termsave"/>
     <item android:title="Delete Term"
           android:id="@+id/termdelete" />
-    <item android:title="Cancel"
+    <item android:title="Back to Term List"
         android:id="@+id/termcancel"/>
 </menu>

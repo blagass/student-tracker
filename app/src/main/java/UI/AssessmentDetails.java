@@ -56,10 +56,8 @@ public class AssessmentDetails extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         repository = new Repository(getApplication());
 
-        //findbyviews
         etAssessmentName = findViewById(R.id.assessmentNameEdit);
 
-        //gets
         assessmentId = getIntent().getIntExtra("id", -1);
         sAssessmentName = getIntent().getStringExtra("assessmentNameEdit");
         courseId = getIntent().getIntExtra("courseId", -1);
@@ -79,10 +77,8 @@ public class AssessmentDetails extends AppCompatActivity {
         assessmentEnd.setFocusable(false);
         assessmentEnd.setClickable(true);
 
-        //settexts
         etAssessmentName.setText(sAssessmentName);
 
-        //NEW CODE
         assessmentButtonGroup = findViewById(R.id.assessmentButtonGroup);
         objectiveButton = findViewById(R.id.objectiveButton);
         performanceButton = findViewById(R.id.performanceButton);
@@ -214,10 +210,8 @@ public class AssessmentDetails extends AppCompatActivity {
             }
             if (currentAssessment != null) {
                 repository.delete(currentAssessment);
-                Toast.makeText(this, "Assessment Deleted", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Assessment Deleted!!", Toast.LENGTH_LONG).show();
                 AssessmentDetails.this.finish();
-            } else {
-                Toast.makeText(this, "Assessment not found", Toast.LENGTH_SHORT).show();
             }
             return true;
         }
@@ -300,7 +294,7 @@ public class AssessmentDetails extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
-        Toast.makeText(AssessmentDetails.this, "Notifications are set for Assessment start and end dates", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AssessmentDetails.this, "Alerts set for Assessment start and end dates", Toast.LENGTH_SHORT).show();
 
     }
 }

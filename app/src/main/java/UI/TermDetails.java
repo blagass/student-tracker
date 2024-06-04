@@ -123,7 +123,7 @@ public class TermDetails extends AppCompatActivity {
                     intent.putExtra("termID", termId);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(TermDetails.this, "Please save the term before adding a course.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TermDetails.this, "You must save the term before adding courses.", Toast.LENGTH_SHORT).show();
                 }
             }
         });

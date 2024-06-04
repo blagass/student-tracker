@@ -84,7 +84,7 @@ public class CourseDetails extends AppCompatActivity {
         editName = findViewById(R.id.coursename);
         courseStart = findViewById(R.id.editStartDate);
         courseEnd = findViewById(R.id.editEndDate);
-        editInstructor = findViewById(R.id.termEnd); // Assuming this ID is correct for the instructor field
+        editInstructor = findViewById(R.id.termEnd);
         editNote = findViewById(R.id.note);
 
 
@@ -92,7 +92,7 @@ public class CourseDetails extends AppCompatActivity {
         String courseEndDate = getIntent().getStringExtra("editEndDate");
         name = getIntent().getStringExtra("name");
         instructor = getIntent().getStringExtra("instructor");
-        courseID = getIntent().getIntExtra("id,", -1); // Note the comma after "id" in your original code, which might be a typo
+        courseID = getIntent().getIntExtra("id,", -1);
         termID = getIntent().getIntExtra("termID", -1);
         note = getIntent().getStringExtra("note");
 
@@ -170,12 +170,11 @@ public class CourseDetails extends AppCompatActivity {
             }
         });
 
-        // ... Initialize RecyclerView and load assessments ...
         recyclerView = findViewById(R.id.assessmentRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
-        loadAssessments(); // Load the assessments for the course.
+        loadAssessments();
     }
 
 
@@ -236,7 +235,7 @@ public class CourseDetails extends AppCompatActivity {
             numAssessments = repository.getmAssociatedAssessments(courseID).size();
             if (numAssessments == 0) {
                 repository.delete(currentCourse);
-                Toast.makeText(this, "Course Deleted", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Course Deleted!", Toast.LENGTH_LONG).show();
                 CourseDetails.this.finish();
             } else {
                 Toast.makeText(CourseDetails.this, "Cannot delete a course with an assessment", Toast.LENGTH_SHORT).show();
@@ -258,49 +257,48 @@ public class CourseDetails extends AppCompatActivity {
             return true;
         }
 
-        if (item.getItemId() == R.id.notify) {
-            String startText = courseStart.getText().toString();
-            String endText = courseEnd.getText().toString();
-            String myFormat = "MM/dd/yy";
-            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            Date dStartDate = null;
-            Date dEndDate = null;
-
-
-            try {
-                dStartDate = sdf.parse(startText);
-                dEndDate = sdf.parse(endText);
-            } catch (ParseException e) {
-                Toast.makeText(CourseDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-
-
-            long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
-            long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
-
-
-            Intent startIntent = new Intent(CourseDetails.this, MyReceiver.class);
-            startIntent.putExtra("key", "Course '" + editName.getText().toString() + "' starting");
-            PendingIntent startSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Intent endIntent = new Intent(CourseDetails.this, MyReceiver.class);
-            endIntent.putExtra("key", "Course '" + editName.getText().toString() + "' ending");
-            PendingIntent endSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
-            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
-            Toast.makeText(CourseDetails.this, "Notifications set for course start and end dates", Toast.LENGTH_SHORT).show();
-
-            return true;
-        }
+//        if (item.getItemId() == R.id.notify) {
+//            String startText = courseStart.getText().toString();
+//            String endText = courseEnd.getText().toString();
+//            String myFormat = "MM/dd/yy";
+//            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+//            Date dStartDate = null;
+//            Date dEndDate = null;
+//
+//
+//            try {
+//                dStartDate = sdf.parse(startText);
+//                dEndDate = sdf.parse(endText);
+//            } catch (ParseException e) {
+//                Toast.makeText(CourseDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+//                return true;
+//            }
+//
+//
+//            long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
+//            long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
+//
+//
+//            Intent startIntent = new Intent(CourseDetails.this, MyReceiver.class);
+//            startIntent.putExtra("key", "Course '" + editName.getText().toString() + "' starting");
+//            PendingIntent startSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//            Intent endIntent = new Intent(CourseDetails.this, MyReceiver.class);
+//            endIntent.putExtra("key", "Course '" + editName.getText().toString() + "' ending");
+//            PendingIntent endSender = PendingIntent.getBroadcast(CourseDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//
+//            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
+//            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);
+//            Toast.makeText(CourseDetails.this, "Notifications set for course start and end dates", Toast.LENGTH_SHORT).show();
+//
+//            return true;
+//        }
 
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -319,9 +317,6 @@ public class CourseDetails extends AppCompatActivity {
         if (assessmentAdapter != null) {
             assessmentAdapter.setAssessments(filteredAssessments);
             assessmentAdapter.notifyDataSetChanged();
-        } else {
-
-            Log.e("CourseDetails", "AssessmentAdapter is null in onResume()");
         }
     }
 
@@ -338,7 +333,7 @@ public class CourseDetails extends AppCompatActivity {
             dStartDate = sdf.parse(startText);
             dEndDate = sdf.parse(endText);
         } catch (ParseException e) {
-            Toast.makeText(CourseDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CourseDetails.this, "Wrong date format", Toast.LENGTH_SHORT).show();
         }
 
 

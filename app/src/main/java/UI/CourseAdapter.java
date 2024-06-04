@@ -78,7 +78,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         holder.itemView.setOnClickListener(view -> {
             Course course = mCourses.get(position);
 
-
             Intent intent = new Intent(context, CourseDetails.class);
             intent.putExtra("id,", course.getCourseID());
             intent.putExtra("name", course.getCourseName());
@@ -92,18 +91,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             context.startActivity(intent);
         });
 
-
-        // Ensure valid data and position
         if (mCourses != null && position < mCourses.size()) {
             Course current = mCourses.get(position);
 
-            // Explicitly get and display the course ID
             int courseId = current.getCourseID();
-            holder.courseItemView.setText("Course ID: " + courseId); // Include the label "Course ID: "
-            holder.courseItemView2.setText(current.getCourseName()); // Display the course name
+            holder.courseItemView.setText("Course ID: " + courseId);
+            holder.courseItemView2.setText(current.getCourseName());
 
         } else {
-            // Handle cases where data is null or position is out of bounds
             holder.courseItemView.setText("No Course ID");
             holder.courseItemView2.setText("No Course Name");
         }

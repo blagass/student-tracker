@@ -6,7 +6,7 @@
         android:id="@+id/assessmentsave"/>
     <item android:title="Delete Assessment"
         android:id="@+id/assessmentdelete" />
-    <item android:title="Cancel"
+    <item android:title="Back to Course"
         android:id="@+id/assessmentcancel" />
 
 </menu>
