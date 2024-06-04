@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Course Name: "
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="Course ID: "
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         tools:layout_editor_absoluteY="2dp" />
 

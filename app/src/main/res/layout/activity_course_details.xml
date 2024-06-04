@@ -10,6 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:background="#BCE5EA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +31,7 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/cardview_shadow_end_color"
             app:layout_constraintBottom_toTopOf="@+id/textView5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +52,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/name" />
+                        android:text="@string/name"
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/coursename"
@@ -86,7 +89,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/note" />
+                        android:text="@string/note"
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/note"
@@ -114,7 +118,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/date" />
+                        android:text="@string/date"
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/editStartDate"
@@ -127,7 +132,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/end_date" />
+                        android:text="@string/end_date"
+                        android:textStyle="bold" />
 
                     <EditText
                         android:id="@+id/editEndDate"
@@ -141,7 +147,7 @@
 
                 <TextView
                     android:id="@+id/textView14"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Course Assessments"
                     android:textSize="16sp"

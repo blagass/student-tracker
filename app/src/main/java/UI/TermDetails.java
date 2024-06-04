@@ -178,6 +178,12 @@ public class TermDetails extends AppCompatActivity {
                 this.finish();
             }
         }
+
+        if(item.getItemId()==R.id.termcancel){
+            TermDetails.this.finish();
+            return true;
+        }
+
         if(item.getItemId()==R.id.termdelete){
             for(Term term: repository.getmAllTerms()){
                 if(term.getTermID()==termId)currentTerm=term;

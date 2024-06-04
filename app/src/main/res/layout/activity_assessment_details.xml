@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#6DA8DDEC"
         tools:context="UI.AssessmentDetails">
 
         <TextView
@@ -21,6 +22,7 @@
             android:layout_marginTop="16dp"
             android:text="Assessment"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,6 +35,7 @@
             android:layout_marginTop="16dp"
             android:text="Name"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/assessmenttitle" />
 
@@ -79,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Start Date:"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/assessmentButtonGroup"
             app:layout_constraintTop_toBottomOf="@+id/assessmentButtonGroup" />
 
@@ -102,6 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="End Date:"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/startDateView"
             app:layout_constraintTop_toBottomOf="@+id/etStartDate" />
 

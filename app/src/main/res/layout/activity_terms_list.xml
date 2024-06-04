@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#C0E3F3"
     tools:context="UI.TermsList">
 
     <TextView
@@ -26,8 +27,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:text="Add or Select a Term to Begin"
-        app:layout_constraintTop_toBottomOf="@+id/termTitle"
-        tools:layout_editor_absoluteX="117dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/termTitle" />
 
     <TextView
         android:id="@+id/textView8"
@@ -45,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="#71297E"
         android:clickable="true"
         android:contentDescription="term detail"
         app:layout_constraintBottom_toBottomOf="parent"

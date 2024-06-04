@@ -49,7 +49,7 @@ public class AssessmentDetails extends AppCompatActivity {
     Assessment currentAssessment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_assessment_details);
@@ -57,18 +57,18 @@ public class AssessmentDetails extends AppCompatActivity {
         repository = new Repository(getApplication());
 
         //findbyviews
-        etAssessmentName =findViewById(R.id.assessmentNameEdit);
+        etAssessmentName = findViewById(R.id.assessmentNameEdit);
 
         //gets
-        assessmentId = getIntent().getIntExtra("id",-1);
-        sAssessmentName =getIntent().getStringExtra("assessmentNameEdit");
+        assessmentId = getIntent().getIntExtra("id", -1);
+        sAssessmentName = getIntent().getStringExtra("assessmentNameEdit");
         courseId = getIntent().getIntExtra("courseId", -1);
 
         String assessmentStartDate = getIntent().getStringExtra("startDate");
         String assessmentEndDate = getIntent().getStringExtra("endDate");
 
-        assessmentStart=findViewById(R.id.etStartDate);
-        assessmentEnd=findViewById(R.id.etEndDate);
+        assessmentStart = findViewById(R.id.etStartDate);
+        assessmentEnd = findViewById(R.id.etEndDate);
 
         assessmentStart.setText(assessmentStartDate);
         assessmentEnd.setText(assessmentEndDate);
@@ -118,7 +118,7 @@ public class AssessmentDetails extends AppCompatActivity {
                 finish();
             }
         }
-        
+
         startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -146,8 +146,6 @@ public class AssessmentDetails extends AppCompatActivity {
         assessmentEnd.setOnClickListener(v -> new DatePickerDialog(AssessmentDetails.this, endDatePickerListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show());
-
-
 
 
         //TYPE
@@ -199,12 +197,13 @@ public class AssessmentDetails extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         dateEditText.setText(sdf.format(calendar.getTime()));
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_assessmentdetails, menu);
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.assessmentdelete) {
             for (Assessment assessment : repository.getmAllAssessments()) {
@@ -223,7 +222,12 @@ public class AssessmentDetails extends AppCompatActivity {
             return true;
         }
 
-        if(item.getItemId()==R.id.assessmentsave){
+        if (item.getItemId() == R.id.assessmentcancel) {
+            AssessmentDetails.this.finish();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.assessmentsave) {
 
             Assessment assessment;
 
@@ -266,7 +270,8 @@ public class AssessmentDetails extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void dateSave(){
+    public void dateSave() {
+
         String startText = assessmentStart.getText().toString();
         String endText = assessmentEnd.getText().toString();
         String myFormat = "MM/dd/yy";
@@ -274,7 +279,6 @@ public class AssessmentDetails extends AppCompatActivity {
         Date dStartDate = null;
         Date dEndDate = null;
 
-        // Date parsing with error handling
         try {
             dStartDate = sdf.parse(startText);
             dEndDate = sdf.parse(endText);
@@ -282,20 +286,17 @@ public class AssessmentDetails extends AppCompatActivity {
             Toast.makeText(AssessmentDetails.this, "Invalid date format", Toast.LENGTH_SHORT).show();
         }
 
-        // Calculate alarm triggers (time since boot, including sleep)
         long triggerStart = SystemClock.elapsedRealtime() + dStartDate.getTime() - System.currentTimeMillis();
         long triggerEnd = SystemClock.elapsedRealtime() + dEndDate.getTime() - System.currentTimeMillis();
 
-        // Create intents and pending intents with unique request codes
         Intent startIntent = new Intent(AssessmentDetails.this, MyReceiver.class);
         startIntent.putExtra("key", "Assessment '" + etAssessmentName.getText().toString() + "' starting");
-        PendingIntent startSender = PendingIntent.getBroadcast(AssessmentDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent startSender = PendingIntent.getBroadcast(AssessmentDetails.this, MainActivity.numAlert++, startIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent endIntent = new Intent(AssessmentDetails.this, MyReceiver.class);
         endIntent.putExtra("key", "Assessment '" + etAssessmentName.getText().toString() + "' ending");
-        PendingIntent endSender = PendingIntent.getBroadcast(AssessmentDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent endSender = PendingIntent.getBroadcast(AssessmentDetails.this, MainActivity.numAlert++, endIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Set the alarms
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerStart, startSender);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerEnd, endSender);

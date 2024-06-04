@@ -10,5 +10,7 @@
         android:id="@+id/notify"/>
     <item android:title="Delete Course"
         android:id="@+id/coursedelete" />
+    <item android:title="Back to Terms"
+        android:id="@+id/coursecancel"/>
 
 </menu>
