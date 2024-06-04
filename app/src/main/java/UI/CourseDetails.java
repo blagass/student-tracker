@@ -1,6 +1,7 @@
 package UI;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -55,6 +57,7 @@ public class CourseDetails extends AppCompatActivity {
     EditText editInstructor;
     Spinner statusSpinner;
     Repository repository;
+    private AssessmentAdapter assessmentAdapter;
 
     private EditText courseStart, courseEnd;
     private final Calendar calendar = Calendar.getInstance();
@@ -66,11 +69,14 @@ public class CourseDetails extends AppCompatActivity {
     RecyclerView recyclerView;
     Course currentCourse;
     int numAssessments;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         FloatingActionButton fab = findViewById(R.id.addAssessmentButton);
 
         //recyclerView=findViewById(R.id.assessmentRecycler); //ADDED THIS NEW
@@ -103,47 +109,35 @@ public class CourseDetails extends AppCompatActivity {
         courseEnd.setClickable(true);
 
 
-        //Spinner
-//        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
-//                this,
-//                R.array.course_status_array,
-//                android.R.layout.simple_spinner_item
-//        );
-//        String courseStatus = getIntent().getStringExtra("statusSpinner");
-//        statusSpinner = findViewById(R.id.statusSpinner);
-//        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        statusSpinner.setAdapter(statusAdapter);
-//        if (courseStatus != null) {
-//            int spinnerPosition = statusAdapter.getPosition(courseStatus);
-//            if (spinnerPosition >= 0) {
-//                statusSpinner.setSelection(spinnerPosition);
-//            } else {
-//
-//                statusSpinner.setSelection(0);
-//            }
-//        }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                    finish();
+                }
+
+        });
 
         // Spinner Setup
         statusSpinner = findViewById(R.id.statusSpinner);
 
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this,
-                R.array.course_status_array, // Your string-array resource containing statuses
+                R.array.course_status_array,
                 android.R.layout.simple_spinner_item
         );
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         statusSpinner.setAdapter(statusAdapter);
 
-        // Get initial status from intent and set selection (only in onCreate)
+
         String initialCourseStatus = getIntent().getStringExtra("statusSpinner");
         if (initialCourseStatus != null) {
             int spinnerPosition = statusAdapter.getPosition(initialCourseStatus);
-            // Ensure the position is valid to prevent crashes
+
             if (spinnerPosition >= 0 && spinnerPosition < statusAdapter.getCount()) {
                 statusSpinner.setSelection(spinnerPosition);
             } else {
-                // Handle invalid position (e.g., set to a default value)
-                statusSpinner.setSelection(0); // Select the first item by default
+                statusSpinner.setSelection(0);
             }
         }
 
@@ -216,6 +210,9 @@ public class CourseDetails extends AppCompatActivity {
         }
         assessmentAdapter.setAssessments(filteredAssessments);
     }
+
+
+
 
     private void updateDateLabel(EditText dateEditText) {
         String myFormat = "MM/dd/yy";
@@ -338,16 +335,18 @@ public class CourseDetails extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
-        recyclerView.setAdapter(assessmentAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         List<Assessment> filteredAssessments = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
             if(assessment.getAssessmentCourseId()==courseID)
                 filteredAssessments.add(assessment);
         }
+
+
+        RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+
+        recyclerView.setAdapter(assessmentAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         runOnUiThread(() -> {
             assessmentAdapter.setAssessments(filteredAssessments);

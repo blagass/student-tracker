@@ -53,7 +53,7 @@ public class AssessmentDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_assessment_details);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         repository = new Repository(getApplication());
 
         //findbyviews
@@ -227,27 +227,6 @@ public class AssessmentDetails extends AppCompatActivity {
 
             Assessment assessment;
 
-//            if(assessmentId == -1){
-//                if(repository.getmAllAssessments().isEmpty())
-//                    assessmentId=1;
-//                else
-//                    assessmentId = repository.getmAllAssessments().get(repository.getmAllAssessments().size() -1).getAssessmentId() +1;
-//                String start = assessmentStart.getText().toString();
-//                String end = assessmentEnd.getText().toString();
-//                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType, start,end,courseId );
-//                repository.insert(assessment);
-//                dateSave();
-//                this.finish();
-//            }
-//            else{
-//                String start = assessmentStart.getText().toString();
-//                String end = assessmentEnd.getText().toString();
-//                assessment = new Assessment(assessmentId, etAssessmentName.getText().toString(),assessmentType,start , end,courseId);
-//                repository.update(assessment);
-//                dateSave();
-//                this.finish();
-//            }
-//            return true;
             String start = assessmentStart.getText().toString();
             String end = assessmentEnd.getText().toString();
 

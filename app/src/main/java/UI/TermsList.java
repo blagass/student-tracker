@@ -1,5 +1,6 @@
 package UI;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -54,6 +55,7 @@ public class TermsList extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         termAdapter.setTerms(allTerms);
         //System.out.println(getIntent().getStringExtra("test"));
+
     }
 
     @Override
@@ -66,10 +68,14 @@ public class TermsList extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         List<Term> allTerms= repository.getmAllTerms();
+
         RecyclerView recyclerView=findViewById(R.id.recyclerview);
+
         final TermAdapter termAdapter=new TermAdapter(this);
+
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         termAdapter.setTerms(allTerms);
     }
 

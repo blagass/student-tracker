@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -79,7 +80,13 @@ public class TermDetails extends AppCompatActivity {
         termEnd.setFocusable(false);
         termEnd.setClickable(true);
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
 
+                finish();
+            }
+        });
         startDatePickerListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -199,16 +206,17 @@ public class TermDetails extends AppCompatActivity {
 
         super.onResume();
 
-        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
-        final CourseAdapter courseAdapter = new CourseAdapter(this);
-        recyclerView.setAdapter(courseAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         List<Course> filteredCourse = new ArrayList<>();
         for(Course course:repository.getmAllCourses()){
             if(course.getTermID() == termId)
                 filteredCourse.add(course);
         }
+
+        RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
+        final CourseAdapter courseAdapter = new CourseAdapter(this);
+
+        recyclerView.setAdapter(courseAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         courseAdapter.setCourses(filteredCourse);
         };
