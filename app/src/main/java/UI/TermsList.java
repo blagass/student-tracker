@@ -75,25 +75,6 @@ public class TermsList extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.addData) {
-            repository=new Repository(getApplication());
-            //Toast.makeText(this, "Course Selected?", Toast.LENGTH_SHORT).show();
-//
-//            Term term = new Term(0, "Art", , );
-//            repository.insert(term);
-//
-//            term = new Term(1,"Science", , );
-//            repository.insert(term);
-//
-//            Course course=new Course(0,"Paint 101","Dr.John",1 );
-//            repository.insert(course);
-//
-//            course=new Course(1,"Drawing 101","Dr.Jill",1);
-//            repository.insert(course);
-
-
-            return true;
-        }
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;

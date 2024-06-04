@@ -63,15 +63,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position){
         if(mCourses!=null){
+
             Course current=mCourses.get(position);
             String name= current.getCourseName();
             int termID= current.getTermID();
             holder.courseItemView.setText(name);
             holder.courseItemView2.setText(Integer.toString(termID));
-        }
-        else {
-            holder.courseItemView.setText("No Course Name");
-            holder.courseItemView.setText("No Term ID");
+            int courseId = current.getCourseID();
+            holder.courseItemView.setText("Course ID: " + courseId);
+            holder.courseItemView2.setText(current.getCourseName());
         }
 
 
@@ -91,6 +91,23 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
             context.startActivity(intent);
         });
+
+
+        // Ensure valid data and position
+        if (mCourses != null && position < mCourses.size()) {
+            Course current = mCourses.get(position);
+
+            // Explicitly get and display the course ID
+            int courseId = current.getCourseID();
+            holder.courseItemView.setText("Course ID: " + courseId); // Include the label "Course ID: "
+            holder.courseItemView2.setText(current.getCourseName()); // Display the course name
+
+        } else {
+            // Handle cases where data is null or position is out of bounds
+            holder.courseItemView.setText("No Course ID");
+            holder.courseItemView2.setText("No Course Name");
+        }
+
     }
 
     public void setCourses(List<Course> courses){

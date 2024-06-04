@@ -196,6 +196,7 @@ public class TermDetails extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
 
         RecyclerView recyclerView = findViewById(R.id.partrecyclerview);
@@ -205,11 +206,13 @@ public class TermDetails extends AppCompatActivity {
 
         List<Course> filteredCourse = new ArrayList<>();
         for(Course course:repository.getmAllCourses()){
-            if(course.getTermID() == termId) filteredCourse.add(course);
+            if(course.getTermID() == termId)
+                filteredCourse.add(course);
         }
 
         courseAdapter.setCourses(filteredCourse);
+        };
 
     }
 
-}
+

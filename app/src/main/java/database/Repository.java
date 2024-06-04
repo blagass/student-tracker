@@ -105,7 +105,7 @@ public class Repository {
         return mAllCourses;
     }
 
-    public List<Course>getmAssociatedCourses(int termID){
+    public List<Course>getAssociatedCourses(int termID){
         databaseExecutor.execute(()->{
             mAllCourses=mCourseDAO.getAssociatedCourses(termID);
         });

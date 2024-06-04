@@ -337,17 +337,21 @@ public class CourseDetails extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         RecyclerView recyclerView = findViewById(R.id.assessmentRecycler);
-       // repository = new Repository(getApplication());
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<Assessment> filteredAssessments = new ArrayList<>();
         for(Assessment assessment:repository.getmAllAssessments()){
-            if(assessment.getAssessmentCourseId()==courseID)filteredAssessments.add(assessment);
+            if(assessment.getAssessmentCourseId()==courseID)
+                filteredAssessments.add(assessment);
         }
-        assessmentAdapter.setAssessments(filteredAssessments);
+
+        runOnUiThread(() -> {
+            assessmentAdapter.setAssessments(filteredAssessments);
+        });
 
     }
 
