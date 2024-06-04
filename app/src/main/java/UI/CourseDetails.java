@@ -81,14 +81,13 @@ public class CourseDetails extends AppCompatActivity {
 
         repository = new Repository(getApplication());
 
-        // Find views
         editName = findViewById(R.id.coursename);
         courseStart = findViewById(R.id.editStartDate);
         courseEnd = findViewById(R.id.editEndDate);
         editInstructor = findViewById(R.id.termEnd); // Assuming this ID is correct for the instructor field
         editNote = findViewById(R.id.note);
 
-        //Setting intents
+
         String courseStartDate = getIntent().getStringExtra("editStartDate");
         String courseEndDate = getIntent().getStringExtra("editEndDate");
         name = getIntent().getStringExtra("name");
@@ -97,21 +96,18 @@ public class CourseDetails extends AppCompatActivity {
         termID = getIntent().getIntExtra("termID", -1);
         note = getIntent().getStringExtra("note");
 
-        // Set view values
+
         courseStart.setText(courseStartDate);
         courseEnd.setText(courseEndDate);
         editInstructor.setText(instructor);
         editName.setText(name);
         editNote.setText(note);
-
-        // Make date fields non-focusable but clickable
         courseStart.setFocusable(false);
         courseStart.setClickable(true);
         courseEnd.setFocusable(false);
         courseEnd.setClickable(true);
 
 
-        // Spinner Setup
         statusSpinner = findViewById(R.id.statusSpinner);
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
                 this,
@@ -169,7 +165,7 @@ public class CourseDetails extends AppCompatActivity {
                     intent.putExtra("courseId", courseID);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(CourseDetails.this, "Please save the course before adding an assessment", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CourseDetails.this, "Save course before adding assessments", Toast.LENGTH_LONG).show();
                 }
             }
         });
