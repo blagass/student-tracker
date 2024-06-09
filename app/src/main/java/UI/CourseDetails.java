@@ -49,9 +49,13 @@ public class CourseDetails extends AppCompatActivity {
     int termID;
 
     String note;
+    String phone;
+    String email;
 
     EditText editName;
     EditText editNote;
+    EditText editPhone;
+    EditText editEmail;
 
     //custom adds
     String instructor;
@@ -84,18 +88,20 @@ public class CourseDetails extends AppCompatActivity {
         editName = findViewById(R.id.coursename);
         courseStart = findViewById(R.id.editStartDate);
         courseEnd = findViewById(R.id.editEndDate);
-        editInstructor = findViewById(R.id.termEnd);
+        editInstructor = findViewById(R.id.editInstructorName);
         editNote = findViewById(R.id.note);
-
+        editPhone = findViewById(R.id.editPhoneField);
+        editEmail = findViewById(R.id.editEmailField);
 
         String courseStartDate = getIntent().getStringExtra("editStartDate");
         String courseEndDate = getIntent().getStringExtra("editEndDate");
         name = getIntent().getStringExtra("name");
-        instructor = getIntent().getStringExtra("instructor");
+        instructor = getIntent().getStringExtra("editInstructorName");
         courseID = getIntent().getIntExtra("id,", -1);
         termID = getIntent().getIntExtra("termID", -1);
         note = getIntent().getStringExtra("note");
-
+        phone = getIntent().getStringExtra("editPhoneField");
+        email = getIntent().getStringExtra("editEmailField");
 
         courseStart.setText(courseStartDate);
         courseEnd.setText(courseEndDate);
@@ -106,7 +112,8 @@ public class CourseDetails extends AppCompatActivity {
         courseStart.setClickable(true);
         courseEnd.setFocusable(false);
         courseEnd.setClickable(true);
-
+        editPhone.setText(phone);
+        editEmail.setText(email);
 
         statusSpinner = findViewById(R.id.statusSpinner);
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
@@ -203,7 +210,9 @@ public class CourseDetails extends AppCompatActivity {
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
                 String note =  editNote.getText().toString();
-                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end,note);
+                String phone = editPhone.getText().toString();
+                String email = editEmail.getText().toString();
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end,note,phone,email);
                 repository.insert(course);
                 dateSave();
                 this.finish();
@@ -212,7 +221,9 @@ public class CourseDetails extends AppCompatActivity {
                 String start = courseStart.getText().toString();
                 String end = courseEnd.getText().toString();
                 String note =  editNote.getText().toString();
-                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end, note);
+                String phone = editPhone.getText().toString();
+                String email = editEmail.getText().toString();
+                course = new Course(courseID, editName.getText().toString(), editInstructor.getText().toString(), termID, selectedStatus, start, end, note,phone,email);
                 repository.update(course);
                 dateSave();
                 this.finish();

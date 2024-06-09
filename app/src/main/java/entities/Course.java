@@ -10,13 +10,12 @@ public class Course {
     private int courseID;
     private String courseName;
     private String instructorName;
-    //Foreign key
     private int termID;
-
+    private String email;
     private String selectedStatus;
     private String startDate;
     private String endDate;
-
+    private String phone;
 
     public String getStartDate() {
         return startDate;
@@ -38,7 +37,23 @@ public class Course {
         return note;
     }
 
-    public Course(int courseID, String courseName, String instructorName, int termID, String selectedStatus, String startDate, String endDate, String note) {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Course(int courseID, String courseName, String instructorName, int termID, String selectedStatus, String startDate, String endDate, String note, String phone, String email) {
         this.courseID = courseID;
         this.courseName = courseName;
         this.instructorName = instructorName;
@@ -47,6 +62,8 @@ public class Course {
         this.startDate=startDate;
         this.endDate=endDate;
         this.note=note;
+        this.phone=phone;
+        this.email=email;
     }
 
     public int getCourseID() {

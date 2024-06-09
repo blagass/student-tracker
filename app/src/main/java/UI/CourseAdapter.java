@@ -39,11 +39,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     Intent intent = new Intent(context, CourseDetails.class);
                     intent.putExtra("id", current.getCourseID());
                     intent.putExtra("name", current.getCourseName());
-                    intent.putExtra("instructor", current.getInstructorName());
+                    intent.putExtra("editInstructorName", current.getInstructorName());
                     intent.putExtra("statusSpinner",current.getSelectedStatus());
                     intent.putExtra("editStartDate", current.getStartDate());
                     intent.putExtra("editEndDate", current.getEndDate());
                     intent.putExtra("note",current.getNote());
+                    intent.putExtra("editPhoneField",current.getPhone());
+                    intent.putExtra("editEmailField",current.getEmail());
                     context.startActivity(intent);
                 }
             });
@@ -81,13 +83,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
             Intent intent = new Intent(context, CourseDetails.class);
             intent.putExtra("id,", course.getCourseID());
             intent.putExtra("name", course.getCourseName());
-            intent.putExtra("instructor", course.getInstructorName());
+            intent.putExtra("editInstructorName", course.getInstructorName());
             intent.putExtra("termID", course.getTermID());
             intent.putExtra("editStartDate", course.getStartDate());
             intent.putExtra("editEndDate", course.getEndDate());
             intent.putExtra("statusSpinner", course.getSelectedStatus());
             intent.putExtra("note",course.getNote());
-
+            intent.putExtra("editPhoneField",course.getPhone());
+            intent.putExtra("editEmailField",course.getEmail());
             context.startActivity(intent);
         });
 
